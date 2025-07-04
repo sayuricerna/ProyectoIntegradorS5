@@ -9,7 +9,8 @@ Proyecto Integrador de **5to semestre** de la carrera de Ingeniería de Software
 ## Comandos
 
 php artisan serve
-npm run dev     
+npm run dev 
+php artisan migrate:refresh    **actualizar cambios en DB**
 
 ## Materias involucradas
 
