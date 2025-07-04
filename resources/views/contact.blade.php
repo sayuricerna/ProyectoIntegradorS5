@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('content')
 <p>here is my beautifuylsite content</p>
 @endsection
