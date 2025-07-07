@@ -22,3 +22,5 @@ Proyecto Integrador de **5to semestre** de la carrera de Ingeniería de Software
 ## Tecnologías utilizadas
 
 Laravel, PHP, HTML, CSS, JavaScript, XAMPP, bootstrap
+
+<!-- jjjh -->

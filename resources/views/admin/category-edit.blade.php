@@ -3,7 +3,7 @@
     <div class="main-content-inner">
         <div class="main-content-wrap">
             <div class="flex items-center flex-wrap justify-between gap20 mb-27">
-                <h3>Brand infomation</h3>
+                <h3>category infomation</h3>
                 <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                     <li>
                         <a href="{{ route('admin.index') }}">
@@ -14,7 +14,7 @@
                         <i class="icon-chevron-right"></i>
                     </li>
                     <li>
-                        <a href="{{ route('admin.brands') }}">
+                        <a href="{{ route('admin.categories') }}">
                             <div class="text-tiny">Marcas</div>
                         </a>
                     </li>
@@ -28,23 +28,23 @@
             </div>
             <!-- Añadir Marca/ categoria -->
             <div class="wg-box">
-                <form class="form-new-product form-style-1" action="{{ route('admin.brand.update') }}" method="POST"
+                <form class="form-new-product form-style-1" action="{{ route('admin.category.update') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="id" value="{{ $brand->id }}"/>
+                    <input type="hidden" name="id" value="{{ $category->id }}"/>
                     <fieldset class="name">
                         <div class="body-title">Nombre de marca <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow" type="text" placeholder="Brand name" name="name"
-                            tabindex="0" value="{{ $brand->name }}" aria-required="true" required="">
+                        <input class="flex-grow" type="text" placeholder="category name" name="name"
+                            tabindex="0" value="{{ $category->name }}" aria-required="true" required="">
                     </fieldset>
                     @error('name') <span class='alert alert-danger text-center'>{{$message}}</span>
                         
                     @enderror
                     <fieldset class="name">
                         <div class="body-title">Website <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow" type="text" placeholder="Brand Slug" name="slug"
-                            tabindex="0" value="{{ $brand->slug }}" aria-required="true" required="">
+                        <input class="flex-grow" type="text" placeholder="category Slug" name="slug"
+                            tabindex="0" value="{{ $category->slug }}" aria-required="true" required="">
                     </fieldset>
                     @error('slug') <span class="alert alert-danger text-center">{{$message}}</span>
                         
@@ -53,9 +53,9 @@
                         <div class="body-title">Subir imagenes <span class="tf-color-1">*</span>
                         </div>
                         <div class="upload-image flex-grow">
-                            @if($brand->image)
+                            @if($category->image)
                             <div class="item" id="imgpreview">
-                                <img src="{{ asset('uploads/brands')}}/{{ $brand->image }}" class="effect8" alt="">
+                                <img src="{{ asset('uploads/categories')}}/{{ $category->image }}" class="effect8" alt="">
                             </div>
                             @endif
                             <div id="upload-file" class="item up-load">

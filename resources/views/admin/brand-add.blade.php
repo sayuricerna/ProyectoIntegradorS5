@@ -3,7 +3,7 @@
     <div class="main-content-inner">
         <div class="main-content-wrap">
             <div class="flex items-center flex-wrap justify-between gap20 mb-27">
-                <h3>Brand infomation</h3>
+                <h3>Información</h3>
                 <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                     <li>
                         <a href="{{ route('admin.index') }}">
@@ -40,7 +40,7 @@
                         
                     @enderror
                     <fieldset class="name">
-                        <div class="body-title">Url de marca <span class="tf-color-1">*</span></div>
+                        <div class="body-title">Website <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Brand Slug" name="slug"
                             tabindex="0" value="{{ old('slug') }}" aria-required="true" required="">
                     </fieldset>
@@ -59,8 +59,8 @@
                                     <span class="icon">
                                         <i class="icon-upload-cloud"></i>
                                     </span>
-                                    <span class="body-text">Drop your images here or select <span
-                                            class="tf-color">click to browse</span></span>
+                                    <span class="body-text">Subir imagen<span
+                                            class="tf-color">Buscar Imagen</span></span>
                                     <input type="file" id="myFile" name="image" accept="image/*">
                                 </label>
                             </div>

@@ -17,8 +17,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css')}}">
     <link rel="stylesheet" href="{{ asset('font/fonts.css')}}">
     <link rel="stylesheet" href="{{ asset('icon/style.css')}}">
-    <link rel="shortcut icon" href="{{ asset('images/favicon.ico')}}">
-    <link rel="apple-touch-icon-precomposed" href="{{ asset('images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{ asset('images/products/favicon.ico')}}">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('images/products/favicon.ico')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/sweetalert.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css')}}">
 
@@ -84,7 +84,7 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            <a href="add-brand.html" class="">
+                                            <a href="{{ route('admin.brand.add') }}" class="">
                                                 <div class="text">Añadir</div>
                                             </a>
                                         </li>
@@ -102,12 +102,13 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            <a href="add-category.html" class="">
+                                            {{-- {{ route('admin.categories.add') }} --}}
+                                            <a href="{{ route('admin.category.add') }}" class="">
                                                 <div class="text">Añadir</div>
                                             </a>
                                         </li>
                                         <li class="sub-menu-item">
-                                            <a href="categories.html" class="">
+                                            <a href="{{ route('admin.categories') }}" class="">
                                                 <div class="text">Lista</div>
                                             </a>
                                         </li>
@@ -581,34 +582,3 @@
     @stack("scripts")
 </body>
 </html>
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My Laravel App</title>
-    @vite(['resources/js/app.js'])
-    
-</head>
-<body>
-    <header>
-        <h1>Sayuri Commerce</h1>
-    </header>
-
-    <main>
-        @yield('content')
-    </main>
-
-    
-    <main>
-        @yield('contact')
-    </main>
-
-    <footer>
-        <p>&copy; 2025 My Laravel App</p>
-    </footer>
-</body>
-</html> -->
