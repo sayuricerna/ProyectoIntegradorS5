@@ -66,12 +66,12 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            <a href="add-product.html" class="">
+                                            <a href="{{ route('admin.product.add') }}" class="">
                                                 <div class="text">Añadir</div>
                                             </a>
                                         </li>
                                         <li class="sub-menu-item">
-                                            <a href="products.html" class="">
+                                            <a href="{{ route('admin.products') }}" class="">
                                                 <div class="text">Lista de Productos</div>
                                             </a>
                                         </li>
