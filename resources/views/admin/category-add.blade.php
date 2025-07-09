@@ -89,7 +89,7 @@
                 $("#imgpreview").show();
             }
         });
-        $("#input[name='name']").on("change",function(){
+        $("input[name='name']").on("change",function(){
             $("input[name='slug']").val(StringToSlug($(this).val()));
         })
         

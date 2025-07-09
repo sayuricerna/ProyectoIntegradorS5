@@ -179,7 +179,6 @@ class AdminController extends Controller
         $categories = Category::select('id','name')->orderBy('name')->get();
         $brands = Brand::select('id','name')->orderBy('name')->get();
         return view('admin.product-add',compact('categories','brands'));
-
     }
     public function productStore(Request $request)
     {
@@ -218,17 +217,16 @@ class AdminController extends Controller
         if($request->hasFile('image'))
         {
             $image = $request->file('image');
-            $imageName->$current_timestamp . '.' . $image->extension();
+            $imageName=$current_timestamp . '.' . $image->extension();
             $this->GenerateProductThumbnailImage($image,$imageName);
             $product->image = $imageName;
-
         }
 
-        $gallery_arr = array();;
+        $gallery_arr = array();
         $gallery_images = "";
         $counter = 1;
 
-        if($request->hasFile("images")){
+        if($request->hasFile('images')){
             $allowedFileExtension = ['jpg','png','jpeg'];
             $files = $request->file('images');
             foreach($files as $file){
@@ -236,20 +234,32 @@ class AdminController extends Controller
                 $gcheck = in_array($gextension, $allowedFileExtension);
                 if($gcheck){
                     $gfileName = $current_timestamp . "-" . $counter . ".". $gextension;
-                    $this->GenerateProductThumbnailImage($gfileName,$imageName);
+                    $this->GenerateProductThumbnailImage($file,$gfileName);
                     array_push($gallery_arr, $gfileName);
-                    $counter = $counter + 1;
-                    
+                    $counter = $counter + 1; 
                 }
             }
             $gallery_images = implode(",", $gallery_arr);
-
-
         }
         $product->images = $gallery_images;
         $product->save();
         return redirect()->route('admin.products')->with('status','se anadio el producto');
     }
+    public function GenerateProductThumbnailImage($image, $imageName)
+    {
+        $destinationPathThumbnail = public_path('uploads/products/thumbnails');
+        $destinationPath = public_path('uploads/products');
+        $img = Image::read($image->path());
+        $img->cover(540,689,'top');
+        $img->resize(540,689, function($constraint){
+            $constraint->aspectRatio();
+        })->save($destinationPath.'/'. $imageName);
+
+        $img->resize(104,104, function($constraint){
+        $constraint->aspectRatio();
+        })->save($destinationPathThumbnail.'/'. $imageName);
+    }
+}
 
     // public function editproduct($id){
     //     $product = product::find($id);
@@ -278,20 +288,8 @@ class AdminController extends Controller
     //     $product->save();
     //     return redirect()->route('admin.products')->with('status','la marca se edito exitosamente');
     // }
-    public function GenerateProductThumbnailImage($image, $imageName)
-    {
-        $destinationPathThumbnail = public_path('uploads/products/thumbnails');
-        $destinationPath = public_path('uploads/products');
-        $img = Image::read($image->path());
-        $img->cover(540,689,'top');
-        $img->resize(540,689, function($constraint){
-            $constraint->aspectRatio();
-        })->save($destinationPath.'/'. $imageName);
-                $img->resize(104,104, function($constraint){
-            $constraint->aspectRatio();
-        })->save($destinationPathThumbnail.'/'. $imageName);
-    }
-    // public function productDelete($id){
+
+        // public function productDelete($id){
     //     $product = product::find($id);
     //     if(file::exists(public_path('uploads/products').'/'.$product->image))
     //     {
@@ -300,4 +298,3 @@ class AdminController extends Controller
     //     $product->delete();
     //     return redirect()->route('admin.products')->with('status','Se ha eliminado la marca');
     // }
-}
