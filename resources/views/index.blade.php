@@ -1,8 +1,15 @@
 @extends('layouts.app')
 @section('content')
-  <main>
-
-    <section class="swiper-container js-swiper-slider swiper-number-pagination slideshow" data-settings='{
+  <main class="container mt-5">
+    <div class="text-center pt-4">
+      <h1 class="mb-4">Bienvenido a la Página Principal</h1>
+      <p>Esta es la página principal de nuestra plataforma. Explora nuestros productos y encuentra lo que necesitas.</p>
+      <div class="mt-4">
+        <a href="{{ url('/productos') }}" class="btn btn-primary">Ver productos</a>
+      </div>
+    </div>
+  </main>
+    {{-- <section class="swiper-container js-swiper-slider swiper-number-pagination slideshow" data-settings='{
         "autoplay": {
           "delay": 5000
         },
@@ -80,8 +87,8 @@
           class="slideshow-pagination slideshow-number-pagination d-flex align-items-center position-absolute bottom-0 mb-5">
         </div>
       </div>
-    </section>
-    <div class="container mw-1620 bg-white border-radius-10">
+    </section> --}}
+    {{-- <div class="container mw-1620 bg-white border-radius-10">
       <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
       <section class="category-carousel container">
         <h2 class="section-title text-center mb-3 pb-xl-2 mb-xl-4"> Categorías</h2>
@@ -912,9 +919,6 @@
           <a class="btn-link btn-link_lg default-underline text-uppercase fw-medium" href="#">Cargar más</a>
         </div>
       </section>
-    </div>
+    </div> --}}
 
-    <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
-
-  </main>
 @endsection

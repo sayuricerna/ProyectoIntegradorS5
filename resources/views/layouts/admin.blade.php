@@ -1,3 +1,4 @@
+{{-- ADMINISTRADOR DE SWINROOM --}}
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -59,7 +60,7 @@
                         </div>
                         <div class="center-item">
                             <ul class="menu-list">
-                                <li class="menu-item has-children">
+                                {{-- <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon"><i class="icon-shopping-cart"></i></div>
                                         <div class="text">Producto</div>
@@ -76,8 +77,8 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
-                                <li class="menu-item has-children">
+                                </li> --}}
+                                {{-- <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon"><i class="icon-layers"></i></div>
                                         <div class="text">Marcas</div>
@@ -94,15 +95,14 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
-                                <li class="menu-item has-children">
+                                </li> --}}
+                                {{-- <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon"><i class="icon-layers"></i></div>
                                         <div class="text">Categorias</div>
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            {{-- {{ route('admin.categories.add') }} --}}
                                             <a href="{{ route('admin.category.add') }}" class="">
                                                 <div class="text">Añadir</div>
                                             </a>
@@ -113,9 +113,33 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
+                                </li> --}}
 
-                                <li class="menu-item has-children">
+                                {{-- PRUDUCTOS --}}
+                        <li class="menu-item">
+                            <a href="{{ route('admin.products') }}" class="">
+                                <div class="icon"><i class="icon-shopping-cart"></i></div>
+                                <div class="text">Productos</div>
+                            </a>
+                        </li>
+                                {{-- MARCAS --}}
+                       <li class="menu-item">
+                            <a href="{{ route('admin.brands') }}" class="">
+                                <div class="icon"><i class="icon-layers"></i></div>
+                                <div class="text">Marcas</div>
+                            </a>
+                        </li>
+                                {{-- CATEGORIAS --}}
+
+                        <li class="menu-item">
+                            <a href="{{ route('admin.categories') }}" class="">
+                                <div class="icon"><i class="icon-layers"></i></div>
+                                <div class="text">Categorías</div>
+                            </a>
+                        </li>
+
+
+                                {{-- <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon"><i class="icon-file-plus"></i></div>
                                         <div class="text">Pedido</div>
@@ -158,17 +182,8 @@
                                         <div class="icon"><i class="icon-settings"></i></div>
                                         <div class="text">Configuración</div>
                                     </a>
-                                </li>
-                                {{-- Esta linea hace GET --}}
-                                {{-- <li class="menu-item">
-                                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                                        @csrf
-                                    <a href="{{ route('logout') }}" class="" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                        <div class="icon"><i class="icon-settings"></i></div>
-                                        <div class="text">Salir</div>
-                                    </a>
-                                    </form>
                                 </li> --}}
+
                                 <li class="menu-item">
                                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                         @csrf
@@ -183,8 +198,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="section-content-right">
 
+                <div class="section-content-right">
                     <div class="header-dashboard">
                         <div class="wrap">
                             <div class="header-left">
@@ -215,7 +230,7 @@
                                                 <div class="divider"></div>
                                             </li>
                                             <li>
-                                                <ul>
+                                                {{-- <ul>
                                                     <li class="product-item gap14 mb-10">
                                                         <div class="image no-bg">
                                                             <img src="images/products/17.png" alt="">
@@ -255,7 +270,7 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                </ul>
+                                                </ul> --}}
                                             </li>
                                         </ul>
                                         <ul class="">
@@ -287,8 +302,7 @@
                                                         </div>
                                                         <div class="flex items-center justify-between gap20 flex-grow">
                                                             <div class="name">
-                                                                <a href="product-list.html" class="body-text">Kristin
-                                                                    Watson</a>
+                                                                <a href="product-list.html" class="body-text">Admin User</a>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -328,7 +342,8 @@
 
                             </div>
                             <div class="header-grid">
-
+                                {{-- NOTIFICACION --}}
+{{-- 
                                 <div class="popup-wrap message type-header">
                                     <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -395,11 +410,11 @@
                                         </ul>
                                     </div>
                                 </div>
+ --}}
 
 
-
-
-                                <div class="popup-wrap user type-header">
+{{-- ADMINISTRADOR NAV --}}
+                                {{-- <div class="popup-wrap user type-header">
                                     <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button"
                                             id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
@@ -458,7 +473,7 @@
                                             </li>
                                         </ul>
                                     </div>
-                                </div>
+                                </div> --}}
 
                             </div>
                         </div>
@@ -466,7 +481,7 @@
                     <div class="main-content">
                         @yield('content')
                         <div class="bottom-page">
-                            <div class="body-text">Derechos/footer</div>
+                            <div class="body-text">Derechos Y footer</div>
                         </div>
                     </div>
 

@@ -45,9 +45,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nombre</th>
-                                <th>Slug</th>
+                                <th>Enlace SLUG</th>
                                 <th>Produtos</th>
-                                <th>Action</th>
+                                <th> </th>
                             </tr>
                         </thead>
                         <tbody>
