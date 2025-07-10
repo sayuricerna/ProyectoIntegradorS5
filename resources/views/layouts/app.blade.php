@@ -312,10 +312,10 @@
         <div class="overflow-hidden">
           <ul class="navigation__list list-unstyled position-relative">
             <li class="navigation__item">
-              <a href="index.html" class="navigation__link">Home</a>              
+              <a href="{{ route('home.index') }}" class="navigation__link">Home</a>              
             </li>
             <li class="navigation__item">
-              <a href="shop.html" class="navigation__link">Tienda</a>
+              <a href="{{ route('shop.index') }}" class="navigation__link">Tienda</a>
             </li>
             <li class="navigation__item">
               <a href="cart.html" class="navigation__link">Carrito</a>
@@ -404,7 +404,7 @@
               <a href="{{route('home.index')}}" class="navigation__link">Home</a>
             </li>
             <li class="navigation__item">
-              <a href="shop.html" class="navigation__link">Tienda</a>
+              <a href="{{ route('shop.index') }}" class="navigation__link">Tienda</a>
             </li>
             <li class="navigation__item">
               <a href="cart.html" class="navigation__link">Carrito</a>
