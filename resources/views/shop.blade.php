@@ -1,5 +1,8 @@
+use Cart;
 @extends('layouts.app')
+
 @section('content')
+
   <main class="pt-90">
     <section class="shop-main container d-flex pt-4 pt-xl-5">
       <div class="shop-sidebar side-sticky bg-body" id="shopFilter">
@@ -416,12 +419,12 @@
                   <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                 </div> --}}
 
-                {{-- <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
+                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
                   title="Add To Wishlist">
                   <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use href="#icon_heart" />
                   </svg>
-                </button> --}}
+                </button>
               </div>
             </div>
           </div>                
@@ -438,5 +441,6 @@
 
       </div>
     </section>
+    
   </main>
 @endsection
