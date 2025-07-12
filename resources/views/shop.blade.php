@@ -1,4 +1,4 @@
-use Cart;
+
 @extends('layouts.app')
 
 @section('content')
@@ -310,13 +310,26 @@ use Cart;
             <a href="#" class="menu-link menu-link_us-s text-uppercase fw-medium">The Shop</a>
           </div>
 
-          <div class="shop-acs d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
-            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Sort Items"
-              name="total-number">
-              <option selected>Ordenar por</option>
-              <option value="1">Destacado</option>
-              <option value="2">ds</option>
+          <div class="shop-acs d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1" >
+            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Page Size" id="pagesize" style="margin-right: 20px;"
+              name="pagesize">
+              <option selected>Mostrar</option>
+              <option value="12">{{$size==12? 'selected':''}}Mostrar</option>
+              <option value="24">{{$size==24? 'selected':''}}24</option>
+              <option value="48">{{$size==48? 'selected':''}}48</option>
+              <option value="102">{{$size==102? 'selected':''}}102</option>
             </select>
+
+
+{{-- 
+            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Page Size" id="pagesize"
+              name="pagesize">
+              <option selected>Mostrar</option>
+              <option value="12">{{$size==12? 'selected':''}}Mostrar</option>
+              <option value="24">{{$size==24? 'selected':''}}24</option>
+              <option value="48">{{$size==48? 'selected':''}}48</option>
+              <option value="102">{{$size==102? 'selected':''}}102</option>
+            </select> --}}
 
             <div class="shop-asc__seprator mx-3 bg-light d-none d-md-block order-md-0"></div>
 
@@ -351,7 +364,7 @@ use Cart;
                           height="400" alt=" {{ $product->name }}" class="pc__img"></a>
                     </div>
                     <div class="swiper-slide">
-                        @foreach ( explode(",",string: $product->images) as $gimg )
+                        @foreach ( explode(",",$product->images) as $gimg )
                       <a href=" {{ route('shop.product.details',['product_slug'=>$product->slug]) }}"><img loading="lazy" src="{{ asset('uploads/products') }}/{{ $product->image }}"
                           width="330" height="400" alt="{{ $product->name }}" class="pc__img"></a>                            
                         @endforeach
@@ -368,21 +381,19 @@ use Cart;
                     </svg></span>
                 </div>
 
-                    @if (Cart::instance('cart')->content()->where('id',$product->id)->count()>0)
+                     @if (Cart::instance('cart')->content()->where('id',$product->id)->count()>0)
                     <a href="{{ route('cart.index') }}" class="pc__atc anim_appear-bottom  position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside btn btn-warning mb-3">Ir al carrito</a>
                     @else
-                    <form name="addtocart-form" method="POST" action="{{ route('cart.add') }}">
-                    @csrf
-                    <input type="hidden" name="id" value="{{ $product->id }}"/>
-                    <input type="hidden" name="quantity" value="1"/>
-                    <input type="hidden" name="name" value="{{ $product->name }}"/>
-                    <input type="hidden" name="price" value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price}}"/>
-                    <button type="submit" class="pc__atc anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside" data-aside="cartDrawer" title="Add To Cart"> A;ADIR AL CARRITO</button>
-                    </form>
+
+                      <form name="addtocart-form" method="POST" action="{{ route('cart.add') }}">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $product->id }}"/>
+                        <input type="hidden" name="quantity" value="1"/>
+                        <input type="hidden" name="name" value="{{ $product->name }}"/>
+                        <input type="hidden" name="price" value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price}}"/>
+                        <button type="submit" class="pc__atc anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium " data-aside="cartDrawer" title="Add To Cart"> Añadir al carrito</button>
+                      </form>
                     @endif
-
-
-
               </div>
 
               <div class="pc__info position-relative">
@@ -435,7 +446,7 @@ use Cart;
 
         <div class="divider">
             <div class="flec items-center justify-between flex-wrap gap10 wgp-pagination">
-                {{ $products->links('pagination::bootstrap-5')}}
+                {{ $products->withQueryString()->links('pagination::bootstrap-5')}}
             </div>
         </div>
 
@@ -443,4 +454,20 @@ use Cart;
     </section>
     
   </main>
+  <form id="frmfilter" method="GET" action="{{ route('shop.index') }}">
+    <input type="hidden" name="page" value="{{ $products->currentPage() }}">
+    <input type="hidden" name="size" id='size' value="{{ $size}}">    
+
+
+  </form>
 @endsection
+@push('scripts')
+<script>
+  $(function(){
+    $('#pagesize').on('change',function(){
+      $('#size').val($("#pagesize option:selected").val());
+      $('#frmfilter').submit();
+    });
+  });
+  </script>
+@endpush
