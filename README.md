@@ -24,6 +24,26 @@ Proyecto Integrador de **5to semestre** de la carrera de Ingeniería de Software
 Laravel, PHP, HTML, CSS, JavaScript, XAMPP, bootstrap
 
 
+Pasos 
+.zip
+cd projectpath
+composer install
+npm install
+copy .env.example .env
+php artisan key:generate
+.env> 
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=nombreDeBaseDeDatos
+DB_USERNAME=root
+DB_PASSWORD=
+php artisan migrate
+<!-- php artisan db:seed -->
+php artisan storage:link
+npm run dev
+php artisan serve
+
 <!-- Modelo: -->
 <!-- 
 app
