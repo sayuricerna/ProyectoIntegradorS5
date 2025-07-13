@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -27,6 +28,8 @@ Route::put('cart/increase-quantity/{rowId}', [CartController::class,'increaseCar
 Route::put('cart/decrease-quantity/{rowId}', [CartController::class,'decreaseCartQuantity'])->name('cart.qty.decrease');
 Route::delete('cart/remove/{rowId}', [CartController::class,'removeItem'])->name('cart.item.remove');
 Route::delete('cart/clear', [CartController::class,'emptyCart'])->name('cart.empty');
+
+Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
 
 // Rutas de usuario autenticado
 Route::middleware(['auth'])->group(function(){

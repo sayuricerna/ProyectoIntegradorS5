@@ -2,7 +2,23 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+  /* .brand-list li , .category-list li {
+    line-height: 40px;
+  }
+  .brand-list li, .category-list li, .chk-category, .chk-brand {
+    width: 1rem;
+    height: 1rem;
+    color: #e4e4e4;
+    border: 0.125rem solid currentColor;
+    border-radius: 0;
+    margin-right: 0.75rem;
+  } */
+  .filled-heart {
+    color: #ff9900ff;
+  }
 
+</style>
   <main class="pt-90">
     <section class="shop-main container d-flex pt-4 pt-xl-5">
       <div class="shop-sidebar side-sticky bg-body" id="shopFilter">
@@ -26,23 +42,18 @@
             </h5>
             <div id="accordion-filter-1" class="accordion-collapse collapse show border-0"
               aria-labelledby="accordion-heading-1" data-bs-parent="#categories-list">
-              <div class="accordion-body px-0 pb-0 pt-3">
+              <div class="accordion-body px-0 pb-0 pt-3 category-list">
                 <ul class="list list-inline mb-0">
-                  <li class="list-item"><a href="#" class="menu-link py-1">cat1 </a> </li>
-                  <li class="list-item"> <a href="#" class="menu-link py-1">cat2</a> </li>
-                  <li class="list-item"><a href="#" class="menu-link py-1">cat3</a></li>
-                  <li class="list-item"> <a href="#" class="menu-link py-1">cat4</a></li>
-                  <li class="list-item"><a href="#" class="menu-link py-1">cat5</a>  </li>
-                  <li class="list-item"> <a href="#" class="menu-link py-1">cat6</a> </li>
-                  <li class="list-item">  <a href="#" class="menu-link py-1">cat7</a> </li>
-                  <li class="list-item"><a href="#" class="menu-link py-1">cat8</a>
-                  </li>
+                  @foreach ($categories as $category)
                   <li class="list-item">
-                    <a href="#" class="menu-link py-1">cat9</a>
+                    <span class="menu-link py-1">
+                      <input type="checkbox" class="chk-category" name="categories" value="{{ $category->id }}"
+                      @if (in_array($category->id, explode(',', $f_categories))) checked='checked'  @endif>
+                      {{ $category->name }}
+                    </span>
+                    <span class="text-right float-end">{{$category->products->count()}}</span>
                   </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">cat10</a>
-                  </li>
+                  @endforeach
                 </ul>
               </div>
             </div>
@@ -133,49 +144,19 @@
             <div id="accordion-filter-brand" class="accordion-collapse collapse show border-0"
               aria-labelledby="accordion-heading-brand" data-bs-parent="#brand-filters">
               <div class="search-field multi-select accordion-body px-0 pb-0">
-                <select class="d-none" multiple name="total-numbers-list">
-                  <option value="1">marca1</option>
-                  <option value="2">patito</option>
-                  <option value="3">Balenciaga</option>
-                  <option value="4">adidas</option>
-                  <option value="5">max</option>
-                  <option value="5">Givenchy</option>
-                  <option value="5">rolex</option>
-                </select>
-                {{-- <div class="search-field__input-wrapper mb-3">
-                  <input type="text" name="search_text"
-                    class="search-field__input form-control form-control-sm border-light border-2"
-                    placeholder="Search" />
-                </div> --}}
-                <ul class="multi-select__list list-unstyled">
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Adidas</span>
-                    <span class="text-secondary">2</span>
+                <ul class="list list-inline mb-0 brand-list">
+                  @foreach ($brands as $brand)
+                  <li class="list-item">
+                    <span class="menu-link py-1">
+                      <input type="checkbox" name="brands" value="{{ $brand->id }}" class="chk-brand" 
+                      @if (in_array($brand->id, explode(',', $f_brands))) checked='checked' @endif>
+                      {{ $brand->name }}
+                    </span>
+                    <span class="text-right float-end">
+                      {{ $brand->products->count() }}
+                    </span>
                   </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Balmain</span>
-                    <span class="text-secondary">7</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Balenciaga</span>
-                    <span class="text-secondary">10</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Burberry</span>
-                    <span class="text-secondary">39</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Kenzo</span>
-                    <span class="text-secondary">95</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Givenchy</span>
-                    <span class="text-secondary">1092</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Zara</span>
-                    <span class="text-secondary">48</span>
-                  </li>
+                  @endforeach
                 </ul>
               </div>
             </div>
@@ -313,14 +294,17 @@
           <div class="shop-acs d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1" >
             <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Page Size" id="pagesize" style="margin-right: 20px;"
               name="pagesize">
-              <option selected>Mostrar</option>
-              <option value="12">{{$size==12? 'selected':''}}Mostrar</option>
-              <option value="24">{{$size==24? 'selected':''}}24</option>
-              <option value="48">{{$size==48? 'selected':''}}48</option>
-              <option value="102">{{$size==102? 'selected':''}}102</option>
+              <option value="12"{{$size==12 ? 'selected':''}}>Mostrar</option>
+              <option value="24"{{$size==24 ? 'selected':''}}>24</option>
+              <option value="48"{{$size==48 ? 'selected':''}}>48</option>
+              <option value="102"{{$size==102 ? 'selected':''}}>102</option>
             </select>
 
-
+            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Short Items" name='orderby' id="orderby" >
+              <option value="-1"{{$order==-1 ? 'selected':''}}>Defecto</option>
+              <option value="1"{{$order==1 ? 'selected':''}}>Precio: Bajo - alto</option>
+              <option value="2"{{$order==2 ? 'selected':''}}>Precio: Alto - bajo</option>
+            </select>
 {{-- 
             <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Page Size" id="pagesize"
               name="pagesize">
@@ -429,13 +413,26 @@
                   </div>
                   <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                 </div> --}}
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
+              @if (Cart::instance('wishlist')->content()->where('id',$product->id)->count()>0)
+                <button type="submit" class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist filled-heart" title="Añadir a la lista de deseos">
                   <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use href="#icon_heart" />
                   </svg>
                 </button>
+              @else
+                <form method="POST" action="{{ route('wishlist.add') }}" >
+                  @csrf
+                  <input type="hidden" name="id" value="{{ $product->id }}"/>
+                  <input type="hidden" name="name" value="{{ $product->name }}"/>
+                  <input type="hidden" name="price" value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price}}">
+                  <input type="hidden" name="quantity" value="1"/>
+                <button type="submit" class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist" title="Añadir a la lista de deseos">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <use href="#icon_heart" />
+                  </svg>
+                </button>
+                </form>
+              @endif
               </div>
             </div>
           </div>                
@@ -457,7 +454,9 @@
   <form id="frmfilter" method="GET" action="{{ route('shop.index') }}">
     <input type="hidden" name="page" value="{{ $products->currentPage() }}">
     <input type="hidden" name="size" id='size' value="{{ $size}}">    
-
+    <input type="hidden" name="order" id='order' value="{{ $order}}">    
+    <input type="hidden" name="brands" id='hdnbrands'>
+    <input type="hidden" name="categories" id='hdnCategories'>
 
   </form>
 @endsection
@@ -466,6 +465,40 @@
   $(function(){
     $('#pagesize').on('change',function(){
       $('#size').val($("#pagesize option:selected").val());
+      $('#frmfilter').submit();
+    });
+    $('#orderby').on('change',function(){
+      $('#order').val($("#orderby option:selected").val());
+      $('#frmfilter').submit();
+    });
+    $("input[name='brands']").on('change',function(){
+      var brands = "";
+      $("input[name='brands']:checked").each(function(){
+        if(brands == "")
+        {
+          brands += $(this).val();
+        }
+        else
+        {
+          brands += ","+$(this).val();
+        }
+      });
+      $('#hdnbrands').val(brands);
+      $('#frmfilter').submit();
+    });
+    $("input[name='categories']").on('change',function(){
+      var categories = "";
+      $("input[name='categories']:checked").each(function(){
+        if(categories == "")
+        {
+          categories += $(this).val();
+        }
+        else
+        {
+          categories += ","+$(this).val();
+        }
+      });
+      $('#hdnCategories').val(categories);
       $('#frmfilter').submit();
     });
   });
