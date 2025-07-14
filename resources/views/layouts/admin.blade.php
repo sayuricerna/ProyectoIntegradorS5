@@ -136,27 +136,15 @@
                                 <div class="icon"><i class="icon-layers"></i></div>
                                 <div class="text">Categorías</div>
                             </a>
+                        </li> 
+
+                        <li class="menu-item has-children">
+                            <a href="{{ route('admin.orders') }}" class="menu-item-button">
+                                <div class="icon"><i class="icon-file-plus"></i></div>
+                                <div class="text">Pedido</div>
+                            </a>
                         </li>
-
-
-                                {{-- <li class="menu-item has-children">
-                                    <a href="javascript:void(0);" class="menu-item-button">
-                                        <div class="icon"><i class="icon-file-plus"></i></div>
-                                        <div class="text">Pedido</div>
-                                    </a>
-                                    <ul class="sub-menu">
-                                        <li class="sub-menu-item">
-                                            <a href="orders.html" class="">
-                                                <div class="text">Pedidos</div>
-                                            </a>
-                                        </li>
-                                        <li class="sub-menu-item">
-                                            <a href="order-tracking.html" class="">
-                                                <div class="text">Seguimiento</div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                {{-- 
                                 <li class="menu-item">
                                     <a href="slider.html" class="">
                                         <div class="icon"><i class="icon-image"></i></div>

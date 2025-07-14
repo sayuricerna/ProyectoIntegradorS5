@@ -7,27 +7,26 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
 use Carbon\Carbon;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function categories()
     {
         $categories = Category::orderBy('id', 'DESC')->paginate(10);
         return view('admin.categories', compact('categories'));
     }
 
-    public function create()
+    public function addCategory()
     {
         return view('admin.category-add');
     }
 
-    public function store(Request $request)
+    public function storeCategory(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'slug' => 'required|unique:categories,slug',
             'image' => 'mimes:png,jpg,jpeg|max:2048'
         ]);
 
@@ -47,17 +46,16 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories')->with('status', 'Categoría añadida exitosamente');
     }
 
-    public function edit($id)
+    public function editCategory($id)
     {
         $category = Category::find($id);
         return view('admin.category-edit', compact('category'));
     }
 
-    public function update(Request $request)
+    public function updateCategory(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'slug' => 'required|unique:categories,slug,'.$request->id,
             'image' => 'mimes:png,jpg,jpeg|max:2048'
         ]);
 
@@ -81,7 +79,7 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories')->with('status', 'Categoría actualizada exitosamente');
     }
 
-    public function destroy($id)
+    public function deleteCategory($id)
     {
         $category = Category::find($id);
         
@@ -96,9 +94,8 @@ class CategoryController extends Controller
     private function generateCategoryThumbnail($image, $imageName)
     {
         $destinationPath = public_path('uploads/categories');
-        $img = Image::make($image->path());
-        $img->fit(124, 124, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destinationPath.'/'.$imageName);
+        $img = Image::read($image->path());
+        $img = $img->resize(124, 124)->cover(124, 124);
+        $img->save($destinationPath.'/'.$imageName);
     }
 }

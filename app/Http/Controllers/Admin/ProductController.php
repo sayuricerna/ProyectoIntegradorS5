@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Intervention\Image\Laravel\Facades\Image;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
@@ -9,25 +9,24 @@ use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function products()
     {
         $products = Product::orderBy('id', 'DESC')->paginate(10);
         return view('admin.products', compact('products'));
     }
 
-    public function create()
+    public function addProduct()
     {
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $brands = Brand::select('id', 'name')->orderBy('name')->get();
         return view('admin.product-add', compact('categories', 'brands'));
     }
 
-    public function store(Request $request)
+    public function storeProduct(Request $request)
     {
         $request->validate([
             'name' => 'required',
@@ -51,7 +50,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products')->with('status', 'Producto añadido exitosamente');
     }
 
-    public function edit($id)
+    public function editProduct($id)
     {
         $product = Product::find($id);
         $categories = Category::select('id', 'name')->orderBy('name')->get();
@@ -59,7 +58,7 @@ class ProductController extends Controller
         return view('admin.product-edit', compact('product', 'categories', 'brands'));
     }
 
-    public function update(Request $request)
+    public function updateProduct(Request $request)
     {
         $request->validate([
             'name' => 'required',
@@ -83,7 +82,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products')->with('status', 'Producto actualizado exitosamente');
     }
 
-    public function destroy($id)
+    public function deleteProduct($id)
     {
         $product = Product::find($id);
         
@@ -181,7 +180,6 @@ class ProductController extends Controller
     {
         $destinationPath = public_path('uploads/products');
         $thumbnailPath = public_path('uploads/products/thumbnails');
-        
         $img = Image::make($image->path());
         
         // Imagen principal
