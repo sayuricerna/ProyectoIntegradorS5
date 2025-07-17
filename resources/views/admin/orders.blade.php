@@ -61,9 +61,9 @@
                                     <td class="text-center">{{ $order->id }}</td>
                                     <td class="text-center">{{ $order->name }}</td>
                                     <td class="text-center">{{ $order->phone }}</td>
-                                    <td class="text-center">{{ $order->subtotal }}</td>
-                                    <td class="text-center">{{ $order->tax }}</td>
-                                    <td class="text-center">{{ $order->total }}</td>
+                                    <td class="text-center">${{ $order->subtotal }}</td>
+                                    <td class="text-center">${{ $order->tax }}</td>
+                                    <td class="text-center">${{ $order->total }}</td>
                                     <td class="text-center">{{ $order->status }}</td>
                                     <td class="text-center">{{ $order->created_at }}</td>
                                     <td class="text-center">{{ $order->orderItems->count() }}</td>

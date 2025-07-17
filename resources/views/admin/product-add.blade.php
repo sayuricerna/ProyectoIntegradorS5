@@ -42,13 +42,13 @@
                 </fieldset>
                     @error('name') <span class='alert alert-danger text-center'>{{$message}}</span> @enderror
 
-                <fieldset class="name">
+                {{-- <fieldset class="name">
                     <div class="body-title mb-10">Enlace SLUG <span class="tf-color-1">*</span></div>
                     <input class="mb-10" type="text" placeholder="Enlace interno para tienda"
                         name="slug" tabindex="0" value="{{ old('slug') }}" aria-required="true" required="">
                     <div class="text-tiny">Max 100c</div>
                 </fieldset>
-                    @error('slug') <span class='alert alert-danger text-center'>{{$message}}</span> @enderror
+                    @error('slug') <span class='alert alert-danger text-center'>{{$message}}</span> @enderror --}}
 
                 <div class="gap22 cols">
                     <fieldset class="category">

@@ -16,46 +16,46 @@
             </ul>
         </div>
 
-                <div class="wg-box">
+        <div class="wg-box">
             <div class="flex items-center justify-between gap10 flex-wrap">
-                <div class="wg-filter flex-grow">
-                    <h5>Detalles del Pedido</h5>
-                </div>
-                <a class="tf-button style-1 w208" href="{{ route('admin.orders') }}">Back</a>
+            <div class="wg-filter flex-grow">
+            <h5>Detalles del Pedido</h5>
+            </div>
+            <a class="tf-button style-1 w208" href="{{ route('admin.orders') }}">Back</a>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <tr>
-                        <th>Pedido#</th>
-                        <td>{{$order->id}}</td>
-                        <th>Contacto</th>
-                        <td>{{$order->phone}}</td>
-                        <th>Código ZIP</th>
-                        <td>{{$order->zip}}</td>
-                    </tr>
-                    <tr>
-                        <th>Fecha de pedido</th>
-                        <td>{{$order->id}}</td>
-                        <th>Fecha de Envio</th>
-                        <td>{{$order->phone}}</td>
-                        <th>Fecha de cancelación</th>
-                        <td>{{$order->zip}}</td>
-                    </tr>
-                    <tr>
-                        <th>Estado de Pedido</th>
-                        <td colspan="5"> 
-                            @if($order->status == 'delivered')
-                                <span class="badge bg-success">Enviado</span>
-                            @elseif($order->status == 'canceled')
-                                <span class="badge bg-danger">Cancelado</span>
-                            @else
-                                <span class="badge bg-warning">Pendiente</span>
-                            @endif
-                        </td>
-                    </tr>
-                </table>
+            <table class="table table-striped table-bordered">
+            <tr>
+                <th>Pedido#</th>
+                <td>{{$order->id}}</td>
+                <th>Contacto</th>
+                <td>{{$order->phone}}</td>
+                <th>Código ZIP</th>
+                <td>{{$order->zip}}</td>
+            </tr>
+            <tr>
+                <th>Fecha de pedido</th>
+                <td>{{$order->id}}</td>
+                <th>Fecha de Envio</th>
+                <td>{{$order->phone}}</td>
+                <th>Fecha de cancelación</th>
+                <td>{{$order->zip}}</td>
+            </tr>
+            <tr>
+                <th>Estado de Pedido</th>
+                <td colspan="5"> 
+                    @if($order->status == 'delivered')
+                        <span class="badge bg-success">Enviado</span>
+                    @elseif($order->status == 'canceled')
+                        <span class="badge bg-danger">Cancelado</span>
+                    @else
+                        <span class="badge bg-warning">Pendiente</span>
+                    @endif
+                </td>
+            </tr>
+            </table>
             </div>
-            </div>
+        </div>
         </div>
 
 
