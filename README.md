@@ -10,9 +10,6 @@ Proyecto Integrador de **5to semestre** de la carrera de Ingeniería de Software
 
 #### php artisan serve
 #### npm run dev 
-#### php artisan migrate:refresh    **actualizar cambios en DB**
-#### php artisan make:model Brand -m
-
 
 ## Materias involucradas
 

@@ -55,4 +55,37 @@ class CartController extends Controller
         $address = Address::where('user_id', Auth::user()->id)->where('is_default', 1)->first();
         return view('checkout', compact('address'));
     }
+    public function placeOrder( Request $request )
+    {
+        $user_id = Auth::user()->id;
+        $address = Address::where('user_id', $user_id)->where('is_default', true)->first();
+
+        if (!$address) {
+            $request->validate([
+                'name' => 'required',
+                'phone' => 'required',
+                'zip' => 'required',
+                'province' => 'required',
+                'city'=> 'required',
+                'address' => 'required',
+                'reference'=> 'required',
+                'country'=> 'required',
+            ]);
+
+            $address = new Address();
+            $address->name= $request->name;
+            $address->phone= $request->phone;
+            $address->zip= $request->zip;
+            $address->province= $request->province;
+            $address->city= $request->city;
+            $address->address= $request->address;
+            $address->reference= $request->reference;
+            $address->country= 'Ecuador';
+            // $address->country= $request->country;
+            $address->user_id = $user_id;
+            $address->is_default = true;
+            $address->save();
+        }
+
+    }
 }
