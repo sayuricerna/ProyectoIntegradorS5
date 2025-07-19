@@ -16,12 +16,11 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('name');
             $table->string('phone');
-            $table->string('locality');
             $table->text('address');
             $table->string('city');
-            $table->string('state');
+            $table->string('province');
             $table->string('country');
-            $table->string('landmark')->nullable();
+            $table->string('reference')->nullable();
             $table->string('zip');
             $table->string('type')->default(false);
             $table->boolean('is_default')->default(false);

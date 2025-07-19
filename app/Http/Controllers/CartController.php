@@ -73,7 +73,7 @@ class CartController extends Controller
                 'city'=> 'required',
                 'address' => 'required',
                 'reference'=> 'required',
-                'country'=> 'required',
+                // 'country'=> 'required',
             ]);
 
             $address = new Address();
@@ -115,22 +115,28 @@ class CartController extends Controller
             $orderItem->quantity = $item->qty;
             $orderItem->save();
         }
-        if ($request->mode == 'stripe') {
-            // return redirect()->route('stripe.checkout', $order->id);
-        } elseif ($request->mode == 'tranference') {
-            // return redirect()->route('transfer.checkout', $order->id);
         $transaction = new Transaction();
         $transaction->user_id = $user_id;
         $transaction->order_id = $order->id;
         $transaction->amount = $order->total;
         $transaction->status = 'pending';
         $transaction->save();
-        }
         Cart::instance('cart')->destroy();
         Session::forget('checkout');
         Session::put('order_id',$order->id);
         return redirect()->route('cart.order.confirmation');
         // return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
+
+
+        if ($request->mode == 'stripe') {
+            // return redirect()->route('stripe.checkout', $order->id);
+        } else if ($request->mode == 'tranference') {
+            // return redirect()->route('transfer.checkout', $order->id);
+        return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
+
+        }
+                return redirect()->route('index');
+
 
     }
     public function setAmountForCheckout()

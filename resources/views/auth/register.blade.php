@@ -148,15 +148,10 @@
                 @enderror
               </div>
 
-              <div class="d-flex align-items-center mb-3 pb-2">
-                <p class="m-0">Your personal data will be used to support your experience throughout this website, to
-                  manage access to your account, and for other purposes described in our privacy policy.</p>
-              </div>
-
-              <button class="btn btn-primary w-100 text-uppercase" type="submit">Register</button>
+              <button class="btn btn-primary w-100 text-uppercase" type="submit">Registrarse</button>
 
               <div class="customer-option mt-4 text-center">
-                <span class="text-secondary">Have an account?</span>
+                <span class="text-secondary">Ya tengo una cuenta</span>
                 <a href="{{ route('login') }}" class="btn-text js-show-register">Ingrese a su cuenta</a>
               </div>
             </form>
