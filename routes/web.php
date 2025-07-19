@@ -38,6 +38,8 @@ Route::delete('/wishlist/clear', [WishlistController::class, 'emptyWishlist'])->
 Route::post('/wishlist/move-to-cart/{rowId}', [WishlistController::class, 'moveToCart'])->name('wishlist.move.to.cart');
 
 Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::post('/checkout/place-order', [CartController::class, 'placeOrder'])->name('cart.place.order');
+Route::get('/checkout/order-confirmation/{order_id}', [CartController::class, 'orderConfirmation'])->name('cart.order.confirmation');
 
 // Rutas de usuario autenticado
 Route::middleware(['auth'])->group(function(){
