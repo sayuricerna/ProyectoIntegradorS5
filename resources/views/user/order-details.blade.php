@@ -244,6 +244,8 @@
                                 <span class="badge bg-success">Aprovado</span>
                                 @elseif ($transaction->status == 'declined')
                                 <span class="badge bg-danger">Rechazado</span>
+                                @elseif ($transaction->status == 'declined')
+                                <span class="badge bg-danger">Reembolso</span>
                                 @else 
                                 <span class="badge bg-warning">Pendiente</span> 
                                 @endif

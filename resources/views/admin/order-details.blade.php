@@ -139,7 +139,7 @@
         </div>
 
         <div class="wg-box mt-5">
-            <h5>Detalles de Pago</h5>
+            <h5>Transaciones</h5>
             <table class="table table-striped table-bordered table-transaction">
                 <tbody>
                     <tr>
@@ -160,6 +160,8 @@
                                 
                             @elseif ($transaction->status == 'declined')
                                 <span class="badge bg-danger">Rechazado</span>
+                            @elseif ($transaction->status == 'refunded')
+                                <span class="badge bg-danger">Devuelto</span>
                             @else 
                                 <span class="badge bg-warning">Pendiente</span> 
                             @endif

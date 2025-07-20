@@ -6,25 +6,13 @@
       <h2 class="page-title">Carrito de compras</h2>
       <div class="checkout-steps">
         <a href="javascript:void(0)" class="checkout-steps__item active">
-          <span class="checkout-steps__item-number">01</span>
-          <span class="checkout-steps__item-title">
-            <span>Productos del carrito  </span>
-            <em>Manage Your Items List</em>
-          </span>
+          <span class="checkout-steps__item-title"> Productos del carrito</span>
         </a>
         <a href="javascript:void(0)" class="checkout-steps__item">
-          <span class="checkout-steps__item-number">02</span>
-          <span class="checkout-steps__item-title">
-            <span>Shipping and Checkout</span>
-            <em>Checkout Your Items List</em>
-          </span>
+          <span class="checkout-steps__item-title">Datos de envio</span>
         </a>
         <a href="javascript:void(0)" class="checkout-steps__item">
-          <span class="checkout-steps__item-number">03</span>
-          <span class="checkout-steps__item-title">
-            <span>Confirmation</span>
-            <em>Review And Submit Your Order</em>
-          </span>
+          <span class="checkout-steps__item-title">Confirmmacion </span>
         </a>
       </div>
       <div class="shopping-cart">

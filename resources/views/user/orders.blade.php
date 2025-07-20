@@ -60,7 +60,7 @@
                                     <th class="text-center">Fecha de entrega</th>
                                     <th></th>
                                 </tr>
-                            </thead>
+                            </thead> 
                             <tbody>
                                 @foreach ($orders as $order) 
                                 <tr>
@@ -87,7 +87,7 @@
                                 </tr>
                                 @endforeach
                                 
-                                                                  
+                                                                   
                             </tbody>
                         </table>                
                     </div>
@@ -101,4 +101,8 @@
         </div>
     </section>
 </main>
+
+
+
+
 @endsection

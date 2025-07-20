@@ -115,27 +115,31 @@ class CartController extends Controller
             $orderItem->quantity = $item->qty;
             $orderItem->save();
         }
-        $transaction = new Transaction();
-        $transaction->user_id = $user_id;
-        $transaction->order_id = $order->id;
-        $transaction->amount = $order->total;
-        $transaction->status = 'pending';
-        $transaction->save();
-        Cart::instance('cart')->destroy();
-        Session::forget('checkout');
-        Session::put('order_id',$order->id);
-        return redirect()->route('cart.order.confirmation');
-        // return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
+        
 
 
         if ($request->mode == 'stripe') {
             // return redirect()->route('stripe.checkout', $order->id);
-        } else if ($request->mode == 'tranference') {
+        } elseif ($request->mode == 'tranference') {
             // return redirect()->route('transfer.checkout', $order->id);
+        // return redirect()->route(route: 'cart.order.confirmation', ['order_id' => $order->id]);
+            $transaction = new Transaction();
+            $transaction->user_id = $user_id;
+            $transaction->order_id = $order->id;
+            $transaction->mode = $request->mode;
+            $transaction->status = 'pending';
+            $transaction->save();
+        }
+
+        
+        Cart::instance('cart')->destroy();
+        Session::forget('checkout');
+        Session::put('order_id',$order->id);
+        // return redirect()->route('cart.order.confirmation');
         return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
 
-        }
-                return redirect()->route('index');
+
+                // return redirect()->route('index');
 
 
     }
@@ -157,15 +161,17 @@ class CartController extends Controller
     }
     public function orderConfirmation($order_id)
     {
-        $order = Order::find($order_id);
-        if ($order) {
-            return view('order-confirmation', compact('order'));
-        }
-        return redirect()->route('cart.index');
-        // if (Session::has('order_id')) {
-        //     $order = Order::find(Session::get('order_id'));
+        // $order = Order::find($order_id);
+        // if ($order) {
         //     return view('order-confirmation', compact('order'));
         // }
         // return redirect()->route('cart.index');
+        if (Session::has('order_id')) {
+            // $order = Order::find(Session::get('order_id'));
+            $order = Order::with('orderItems')->find(Session::get('order_id'));
+
+            return view('order-confirmation', compact('order'));
+        }
+        return redirect()->route('cart.index');
     }
 }

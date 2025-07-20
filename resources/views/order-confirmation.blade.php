@@ -68,8 +68,6 @@
               </thead>
               <tbody>
                 @foreach ($order->orderItems as $item )
-                    
-                
                 <tr>
                   <td>
                     {{ $item->product->name }} x {{ $item->quantity }}
