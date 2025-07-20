@@ -126,7 +126,9 @@ class CartController extends Controller
             $transaction = new Transaction();
             $transaction->user_id = $user_id;
             $transaction->order_id = $order->id;
-            $transaction->mode = $request->mode;
+            // $transaction->mode = $request->mode;
+            $transaction->mode = $request->input('mode');
+            
             $transaction->status = 'pending';
             $transaction->save();
         }
