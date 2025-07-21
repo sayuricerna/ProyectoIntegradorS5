@@ -21,8 +21,59 @@ Proyecto Integrador de **5to semestre** de la carrera de Ingeniería de Software
 Laravel, PHP, HTML, CSS, JavaScript, XAMPP, bootstrap
 
 
-Pasos 
-.zip
+## INSTALACIÓN
+## 📦 Requisitos Técnicos
+- PHP 8.0 o superior
+- Composer 2.x
+- Node.js 16.x o superior
+- MySQL 5.7+ o MariaDB 10.3+
+- Servidor web (Apache/Nginx) o PHP built-in server
+
+### 1. Clonar repositorio
+```bash
+git clone https://github.com/sayuricerna/ProyectoIntegradorS5.git
+cd ProyectoIntegradorS5-main
+composer install
+npm install
+copy .env.example .env
+php artisan key:generate
+
+Editar el archivo .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=swinroom_db
+DB_USERNAME=root
+DB_PASSWORD=pw
+php artisan migrate
+php artisan storage:link
+npm run dev
+php artisan serve
+
+```
+
+## DEPENDECIAS
+
+Laravel 10	Framework backend
+Bootstrap 5	Framework CSS
+jQuery	Manipulación DOM
+Laravel UI	Autenticación
+Intervention Image	Procesamiento de imágenes
+Fancybox	Galería de productos
+
+### Limpiar caché
+php artisan optimize:clear
+
+### Ver rutas disponibles
+php artisan route:list
+
+### Crear enlace de storage
+php artisan storage:link
+
+### Monitorizar cambios en Vite
+npm run watch
+
+Descarga del .zip o Git clone
 cd projectpath
 composer install
 npm install
@@ -40,6 +91,8 @@ php artisan migrate
 php artisan storage:link
 npm run dev
 php artisan serve
+
+
 
 <!-- Modelo: -->
 <!-- 
