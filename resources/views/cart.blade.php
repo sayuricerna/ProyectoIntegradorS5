@@ -21,10 +21,10 @@
           <table class="cart-table">
             <thead>
               <tr>
-                <th>Product</th>
+                <th>Producto</th>
                 <th></th>
-                <th>Price</th>
-                <th>Quantity</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
                 <th>Subtotal</th>
                 <th></th>
               </tr>
@@ -42,10 +42,6 @@
                 <td>
                   <div class="shopping-cart__product-item__detail">
                     <h4>{{ $item->name }}</h4>
-                    <ul class="shopping-cart__product-item__options">
-                      <li>Color: Yellow </li>
-                      <li> Size: L </li>
-                    </ul>
                   </div>
                 </td>
                 <td>
@@ -114,9 +110,9 @@
                     <td>${{Cart::instance('cart')->subtotal()}}</td>
                   </tr>
                   <tr>
-                    <th>Shipping</th>
+                    <th>Envío</th>
                     <td>
-                      <td>Free</td>
+                      <td>Gratis</td>
                     </td>
                   </tr>
                   <tr>
@@ -132,7 +128,7 @@
             </div>
             <div class="mobile_fixed-btn_wrapper">
               <div class="button-wrapper container">
-                <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-checkout">PROCEED TO CHECKOUT</a>
+                <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-checkout">Continuar</a>
               </div>
             </div>
           </div>
@@ -140,8 +136,8 @@
         @else
         <div class="row">
           <div class="col-md-12 text-center pt-5 bp-5">
-            <p>no hay ningun item en el carrito</p>
-            <a href="{{ route('shop.index') }}" class="btn btn-info">Comprar Ahora</a>
+            <p>No hay ningun item en el carrito</p>
+            <a href="{{ route('shop.index') }}" class="btn btn-primary">Comprar Ahora</a>
           </div>
         </div>
         @endif

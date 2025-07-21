@@ -140,7 +140,7 @@
                         <li class="menu-item has-children">
                             <a href="{{ route('admin.orders') }}" class="menu-item-button">
                                 <div class="icon"><i class="icon-file-plus"></i></div>
-                                <div class="text">Pedido</div>
+                                <div class="text">Pedidos</div>
                             </a>
                         </li>
                                 {{-- 
@@ -203,7 +203,6 @@
                     <div class="main-content">
                         @yield('content')
                         <div class="bottom-page">
-                            <div class="body-text">Derechos Y footer</div>
                         </div>
                     </div>
 

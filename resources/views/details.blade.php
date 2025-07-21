@@ -70,17 +70,6 @@
               <a href="#" class="menu-link menu-link_us-s text-uppercase fw-medium">Tienda</a>
             </div>
 
-            <div
-              class="product-single__prev-next d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
-              <a href="#" class="text-uppercase fw-medium"><svg width="10" height="10" viewBox="0 0 25 25"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <use href="#icon_prev_md" />
-                </svg><span class="menu-link menu-link_us-s">Prev</span></a>
-              <a href="#" class="text-uppercase fw-medium"><span class="menu-link menu-link_us-s">Next</span><svg
-                  width="10" height="10" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                  <use href="#icon_next_md" />
-                </svg></a>
-            </div>
           </div>
           <h1 class="product-single__name">{{ $product->name }}</h1>
 
@@ -166,7 +155,7 @@
     <div class="mb-md-1 pb-md-3"></div>
     <div class="mb-md-1 pb-md-3"></div>
     <section class="products-carousel container">
-      <h2 class="h3 text-uppercase mb-4 pb-xl-2 mb-xl-4">Related <strong>Products</strong></h2>
+      <h2 class="h3 text-uppercase mb-4 pb-xl-2 mb-xl-4"><strong>Otras prendas</strong></h2>
 
       <div id="related_products" class="position-relative">
         <div class="swiper-container js-swiper-slider" data-settings='{
@@ -224,7 +213,7 @@
                     <input type="hidden" name="quantity" value="1"/>
                     <input type="hidden" name="name" value="{{ $rproduct->name }}"/>
                     <input type="hidden" name="price" value="{{ $rproduct->sale_price == '' ? $rproduct->regular_price : $rproduct->sale_price}}"/>
-                    <button type="submit" class="pc__atc anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside" data-aside="cartDrawer" title="Add To Cart"> A;ADIR AL CARRITO</button>
+                    <button type="submit" class="pc__atc anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside" data-aside="cartDrawer" title="Add To Cart"> Añadir al carrito</button>
                     </form>
                     @endif
 

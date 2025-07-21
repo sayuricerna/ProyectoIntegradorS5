@@ -3,7 +3,7 @@
   <main class="pt-90">
     <div class="mb-4 pb-4"></div>
     <section class="shop-checkout container">
-      <h2 class="page-title">Wishlist</h2>
+      <h2 class="page-title">Lista de deseos</h2>
 
       <div class="shopping-cart">
         @if (Cart::instance('wishlist')->content()->count()>0)
@@ -11,11 +11,11 @@
           <table class="cart-table">
             <thead>
               <tr>
-                <th>Product</th>
+                <th>Producto</th>
                 <th></th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Action</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Acción</th>
                 <th></th>
               </tr>
             </thead>
@@ -76,14 +76,14 @@
             <form method="POST" action="{{ route('wishlist.empty') }}">
               @csrf
               @method('DELETE')
-              <button type="submit" class="btn btn-light">Empty Wishlist</button>
+              <button type="submit" class="btn btn-light">Vacias lista de Deseos</button>
           </div>
         </div>
         @else
         <div class="row">
             <div class="col-md-12">
                 <p> La lista de deseos está vacía</p>
-                <a href="{{ route('shop.index') }}" class="btn btn-info"> Ir a comprar</a>
+                <a href="{{ route('shop.index') }}" class="btn btn-primary"> Ir a comprar</a>
             </div>
         </div>    
         @endif

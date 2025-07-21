@@ -23,7 +23,7 @@
     <section class="shop-main container d-flex pt-4 pt-xl-5">
       <div class="shop-sidebar side-sticky bg-body" id="shopFilter">
         <div class="aside-header d-flex d-lg-none align-items-center">
-          <h3 class="text-uppercase fs-6 mb-0">Filter By</h3>
+          <h3 class="text-uppercase fs-6 mb-0">Filtar por</h3>
           <button class="btn-close-lg js-close-aside btn-close-aside ms-auto"></button>
         </div>
 
@@ -234,7 +234,7 @@
             </select>
 
             <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Short Items" name='orderby' id="orderby" >
-              <option value="-1"{{$order==-1 ? 'selected':''}}>Defecto</option>
+              <option value="-1"{{$order==-1 ? 'selected':''}}>Por defecto</option>
               <option value="1"{{$order==1 ? 'selected':''}}>Precio: Bajo - alto</option>
               <option value="2"{{$order==2 ? 'selected':''}}>Precio: Alto - bajo</option>
             </select>
@@ -263,7 +263,7 @@
                   xmlns="http://www.w3.org/2000/svg">
                   <use href="#icon_filter" />
                 </svg>
-                <span class="text-uppercase fw-medium d-inline-block align-middle">Filter</span>
+                <span class="text-uppercase fw-medium d-inline-block align-middle">Filtro</span>
               </button>
             </div>
           </div>

@@ -16,7 +16,7 @@
                         <i class="icon-chevron-right"></i>
                     </li>
                     <li>
-                        <div class="text-tiny">Orders</div>
+                        <div class="text-tiny">Pedidos</div>
                     </li>
                 </ul>
             </div>
@@ -65,7 +65,7 @@
                                     <td class="text-center">${{ $order->tax }}</td>
                                     <td class="text-center">${{ $order->total }}</td>
                                     <td class="text-center">
-                                                                            @if($order->status == 'delivered')
+                                    @if($order->status == 'delivered')
                                     <span class="badge bg-success">Enviado</span>
                                     @elseif($order->status == 'canceled')
                                     <span class="badge bg-danger">Cancelado</span>
@@ -97,11 +97,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-    <div class="bottom-page">
-        <div class="body-text">Copyright © 2024 SurfsideMedia</div>
     </div>
 </div>
 @endsection

@@ -164,15 +164,15 @@
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
-                            <th>Name</th>
-                            <th class="text-center">Price</th>
-                            <th class="text-center">Quantity</th>
-                            <th class="text-center">SKU</th>
-                            <th class="text-center">Category</th>
-                            <th class="text-center">Brand</th>
-                            <th class="text-center">Options</th>
-                            <th class="text-center">Return Status</th>
-                            <th class="text-center">Action</th>
+                            <th>Nombre</th>
+                            <th class="text-center">Precio</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-center">link Interno</th>
+                            <th class="text-center">Categoría</th>
+                            <th class="text-center">Marca</th>
+                            <th class="text-center">opción</th>
+                            <th class="text-center">Estado de devolución</th>
+                            <th class="text-center">__</th>
                             </tr>
                             </thead>
                             <tbody>

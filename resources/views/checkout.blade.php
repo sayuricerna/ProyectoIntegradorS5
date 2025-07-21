@@ -3,28 +3,16 @@
   <main class="pt-90">
     <div class="mb-4 pb-4"></div>
     <section class="shop-checkout container">
-      <h2 class="page-title">Shipping and Checkout</h2>
+      <h2 class="page-title">Envío y Checkout</h2>
       <div class="checkout-steps">
         <a href="{{ route('cart.index') }}" class="checkout-steps__item active">
-          <span class="checkout-steps__item-number">01</span>
-          <span class="checkout-steps__item-title">
-            <span>Shopping Bag</span>
-            <em>Manage Your Items List</em>
-          </span>
+          <span class="checkout-steps__item-title"> Productos del carrito</span>
         </a>
         <a href="javascript::void(0)" class="checkout-steps__item active">
-          <span class="checkout-steps__item-number">02</span>
-          <span class="checkout-steps__item-title">
-            <span>Shipping and Checkout</span>
-            <em>Checkout Your Items List</em>
-          </span>
+          <span class="checkout-steps__item-title">Datos de envio</span>
         </a>
         <a href="javascript::void(0)" class="checkout-steps__item">
-          <span class="checkout-steps__item-number">03</span>
-          <span class="checkout-steps__item-title">
-            <span>Confirmation</span>
-            <em>Review And Submit Your Order</em>
-          </span>
+          <span class="checkout-steps__item-title">Confirmmacion </span>
         </a>
       </div>
       <form name="checkout-form" action="{{ route('cart.place.order') }}" method="POST">
@@ -33,7 +21,7 @@
           <div class="billing-info__wrapper">
             <div class="row">
               <div class="col-6">
-                <h4>SHIPPING DETAILS</h4>
+                <h4>Detales de Envío</h4>
               </div>
               <div class="col-6">
               </div>
@@ -142,7 +130,7 @@
                       <td class="text-right">{{Cart::instance('cart')->subtotal()}}</td>
                     </tr>
                     <tr>
-                      <th>SHIPPING</th>
+                      <th>ENVÍO</th>
                       <td class="text-right">Free shipping</td>
                     </tr>
                     <tr>
@@ -172,7 +160,7 @@
                   </label>
                 </div>
               </div>
-              <button class="btn btn-primary btn-checkout">Proceder con checkout</button>
+              <button class="btn btn-primary btn-checkout">Continuar</button>
             </div>
           </div>
         </div>
