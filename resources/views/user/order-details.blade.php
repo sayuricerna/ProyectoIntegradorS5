@@ -119,6 +119,9 @@
                         </div>
                     </div>
                     <div class="table-responsive">
+                        @if (Session::has('status'))
+                            <p class="alert alert-success">  {{ Session::get('status') }} </p> 
+                        @endif
                         <table class="table  table-bordered table-striped table-transaction">
                             <tr>
                                 <th>Pedido#</th>
@@ -128,13 +131,13 @@
                                 <th>Código ZIP</th>
                                 <td>{{$order->zip}}</td>
                             </tr>
-                            <tr>
+                            <tr> 
                                 <th>Fecha de pedido</th>
-                                <td>{{$order->id}}</td>
+                                <td>{{ $order->created_at }}</td>
                                 <th>Fecha de Envio</th>
-                                <td>{{$order->phone}}</td>
+                                <td>{{ $order->delivered_date }}</td>
                                 <th>Fecha de cancelación</th>
-                                <td>{{$order->zip}}</td>
+                                <td>{{ $order->canceled_date  }}</td>
                             </tr>
                             <tr>
                                 <th>Estado de Pedido</th>
@@ -226,36 +229,81 @@
                 <div class="wg-box mt-5">
                     <h5>Detalles de Pago</h5>
                     <table class="table table-striped table-bordered table-transaction">
-                    <tbody>
-                        <tr>
-                            <th>Subtotal</th>
-                            <td> {{ $order->subtotal }}</td>
-                            <th>IVA</th>
-                            <td> {{ $order->tax }}</td>
-                        </tr>
-                        <tr>
-                            <th>Total</th>
-                            <td> {{ $order->total }}</td>
-                            <th>Modo de Pago</th>
-                            <td> {{ $transaction->mode }}</td>
-                            <th>Estado</th>
-                            <td>  
-                                @if ($transaction->status == 'approved')
-                                <span class="badge bg-success">Aprovado</span>
-                                @elseif ($transaction->status == 'declined')
-                                <span class="badge bg-danger">Rechazado</span>
-                                @elseif ($transaction->status == 'declined')
-                                <span class="badge bg-danger">Reembolso</span>
-                                @else 
-                                <span class="badge bg-warning">Pendiente</span> 
-                                @endif
-                            </td>
-                        </tr>
-                    </tbody>
+                        <tbody>
+                            <tr>
+                                <th>Subtotal</th>
+                                <td> {{ $order->subtotal }}</td>
+                                <th>IVA</th>
+                                <td> {{ $order->tax }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total</th>
+                                <td> {{ $order->total }}</td>
+                                <th>Modo de Pago</th>
+                                <td> {{ $transaction->mode }}</td>
+                                <th>Estado</th>
+                                <td>  
+                                    @if ($transaction->status == 'approved')
+                                    <span class="badge bg-success">Aprovado</span>
+                                    @elseif ($transaction->status == 'declined')
+                                    <span class="badge bg-danger">Rechazado</span>
+                                    @elseif ($transaction->status == 'declined')
+                                    <span class="badge bg-danger">Reembolso</span>
+                                    @else 
+                                    <span class="badge bg-warning">Pendiente</span> 
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
+                {{-- <div class="wg-box mt-5 ">
+                    <form action="{{ route('user.order.invoice', ['order_id' => $order->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Descargar Factura</button>
+                    </form>
+                </div> --}}
+
+                @if ($order->status == 'ordered' || $order->status == 'pending')
+                {{-- CANCELACION DE PEDIDO --}}
+                <div class="wg-box mt-5 text-right">
+                    <form action="{{ route('user.order.cancel') }}" method="POST">
+                        @csrf
+                        @method('PUT') 
+                        <input type="hidden" name="order_id" value="{{ $order->id }}">
+                        <button type="button" class="btn btn-danger cancel-order">Cancelar Pedido</button>
+                    </form>
+                </div>                    
+                @endif
+
+
             </div>
         </div>
     </section>
 </main>
 @endsection
+
+
+@push('scripts')
+<script>
+    $(function(){
+        $('.cancel-order').on('click',function(e){
+            e.preventDefault();
+            var form = $(this).closest('form');
+            swal({
+                title: "Esta seguro de Cancelar el Pedido",
+                text: "Una vez cancelado no se podrá recuperar",
+                type: "advertencia",
+                buttons: ["No","Si"],
+                confirmButtonColor: '#dc3545'
+            }).then(function(result){
+                if(result)
+                {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+    
+@endpush

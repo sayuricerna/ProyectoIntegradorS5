@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('icon/style.css')}}">
     <link rel="shortcut icon" href="{{ asset('images/products/favicon.ico')}}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('images/products/favicon.ico')}}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/sweetalert.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset(path: 'css/sweetalert.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css')}}">
 
     @stack("styles")

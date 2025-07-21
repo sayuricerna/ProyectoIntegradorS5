@@ -59,7 +59,7 @@
                 </table>
             </div>
         </div>
-        </div>
+        {{-- </div> --}}
 
 
         <div class="wg-box">
@@ -183,7 +183,7 @@
                             <select name="order_status" id="order_status">
                                 <option value="ordered" {{ $order->status == "ordered" ? 'selected' : '' }}>Pedido</option>
                                 <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Enviado</option>
-                                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelado</option>
+                                <option value="canceled" {{ $order->status == 'canceled' ? 'selected' : '' }}>Cancelado</option>
                             </select>
                         </div>
                     </div>
