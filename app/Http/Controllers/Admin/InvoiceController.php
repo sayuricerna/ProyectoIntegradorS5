@@ -81,7 +81,7 @@ class InvoiceController extends Controller
         ]);
 
         $filename = 'invoice_' . $invoice->invoice_number . '.pdf';
-        $path = 'private/invoices/' . $filename;
+        $path = 'invoices/' . $filename;
         
         Storage::put($path, $pdf->output());
         $invoice->update(['pdf_path' => $path]);
@@ -104,7 +104,7 @@ class InvoiceController extends Controller
         // Descargar el PDF
         return response()->download(
             Storage::path($invoice->pdf_path),
-            'factura_' . $invoice->invoice_number . '.pdf'
+            'factura_'. $invoice->invoice_number . '.pdf'
         );
     }
 }
