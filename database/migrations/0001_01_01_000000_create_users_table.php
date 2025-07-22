@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('mobile')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            // se crea nuevo usuario
-            $table->string('utype')->default('USR')->comment('ADM for Admin and USR for user or custumer');
+            $table->string('utype')->default('USR')->comment('ADM para administrador USR para cliente');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -45,6 +45,15 @@
             <span>{{ $order->transaction->mode }}</span>
           </div>
         </div>
+        {{-- BTON DESCARGAR FACTURA --}}
+
+                <div class="order-info__item mt-4">
+                    <a href="{{ route('invoice.download', $order->id) }}" class="btn btn-primary">
+                        <i class="fas fa-file-pdf"></i> Descargar Factura PDF
+                    </a>
+                </div>
+
+
         <div class="checkout__totals-wrapper">
           <div class="checkout__totals">
             <h3>Detalles de orden</h3>

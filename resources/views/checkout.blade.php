@@ -131,7 +131,7 @@
                     </tr>
                     <tr>
                       <th>ENVÍO</th>
-                      <td class="text-right">Free shipping</td>
+                      <td class="text-right">Gratis</td>
                     </tr>
                     <tr>
                       <th>IVA(15%)</th>

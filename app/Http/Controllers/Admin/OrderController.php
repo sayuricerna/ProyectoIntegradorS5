@@ -8,7 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use PDF; 
 class OrderController extends Controller
 {
     public function orders()
@@ -42,5 +42,6 @@ class OrderController extends Controller
         return back()->with('status', 'Order status updated successfully.');
         
     }
+
 
 }

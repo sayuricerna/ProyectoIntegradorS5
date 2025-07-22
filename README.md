@@ -212,9 +212,9 @@ routes
     web.php
 storage
 tests
-vender
+vendor
 .editorconfig
-.emv
+.env
 .env.example
 .gitattributes
 .gitignore

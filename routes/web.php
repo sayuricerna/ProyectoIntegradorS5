@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BrandController;
@@ -47,7 +48,9 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/account-orders', [UserController::class,'orders'])->name('user.orders');
     Route::get('/account-order/{order_id}/details', [UserController::class,'orderDetails'])->name(   'user.order.details');
     Route::put('/account-order/cancel', [UserController::class,'cancelOrder'])->name('user.order.cancel');
-});
+    // agg
+    Route::get('/orders/{order}/invoice/download', [InvoiceController::class, 'download'])
+     ->name('invoice.download');});
 
 
 // Rutas de administración

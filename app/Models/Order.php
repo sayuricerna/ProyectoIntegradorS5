@@ -19,4 +19,9 @@ class Order extends Model
     {
         return $this->hasOne(Transaction::class);
     }
+        // Agg
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }

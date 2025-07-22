@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Invoice;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -73,7 +74,6 @@ class CartController extends Controller
                 'city'=> 'required',
                 'address' => 'required',
                 'reference'=> 'required',
-                // 'country'=> 'required',
             ]);
 
             $address = new Address();
@@ -85,7 +85,6 @@ class CartController extends Controller
             $address->address= $request->address;
             $address->reference= $request->reference;
             $address->country= 'Ecuador';
-            // $address->country= $request->country;
             $address->user_id = $user_id;
             $address->is_default = true;
             $address->save();
@@ -116,34 +115,24 @@ class CartController extends Controller
             $orderItem->save();
         }
         
-
-
         if ($request->mode == 'stripe') {
-            // return redirect()->route('stripe.checkout', $order->id);
         } elseif ($request->mode == 'tranference') {
-            // return redirect()->route('transfer.checkout', $order->id);
-        // return redirect()->route(route: 'cart.order.confirmation', ['order_id' => $order->id]);
             $transaction = new Transaction();
             $transaction->user_id = $user_id;
             $transaction->order_id = $order->id;
-            // $transaction->mode = $request->mode;
             $transaction->mode = $request->input('mode');
-            
             $transaction->status = 'pending';
             $transaction->save();
         }
-
-        
         Cart::instance('cart')->destroy();
         Session::forget('checkout');
         Session::put('order_id',$order->id);
-        // return redirect()->route('cart.order.confirmation');
+                    // Generar la factura (en segundo plano)
+        dispatch(function () use ($order) {
+            $invoiceController = new InvoiceController();
+            $invoiceController->generate($order);
+        });
         return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
-
-
-                // return redirect()->route('index');
-
-
     }
     public function setAmountForCheckout()
     {
@@ -163,15 +152,8 @@ class CartController extends Controller
     }
     public function orderConfirmation($order_id)
     {
-        // $order = Order::find($order_id);
-        // if ($order) {
-        //     return view('order-confirmation', compact('order'));
-        // }
-        // return redirect()->route('cart.index');
         if (Session::has('order_id')) {
-            // $order = Order::find(Session::get('order_id'));
             $order = Order::with('orderItems')->find(Session::get('order_id'));
-
             return view('order-confirmation', compact('order'));
         }
         return redirect()->route('cart.index');
