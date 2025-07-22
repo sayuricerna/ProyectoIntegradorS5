@@ -60,6 +60,7 @@
                                 <tr>
                                     <td class="text-center">{{ $order->id }}</td>
                                     <td class="text-center">{{ $order->name }}</td>
+                                    <td class="text-center">{{ $order->cedula }}</td>
                                     <td class="text-center">{{ $order->phone }}</td>
                                     <td class="text-center">${{ $order->subtotal }}</td>
                                     <td class="text-center">${{ $order->tax }}</td>

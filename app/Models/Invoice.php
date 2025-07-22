@@ -16,6 +16,7 @@ use HasFactory;
         'order_id',
         'client_name',
         'client_email',
+        'client_cedula',
         'client_phone',
         'client_address',
         'client_city',

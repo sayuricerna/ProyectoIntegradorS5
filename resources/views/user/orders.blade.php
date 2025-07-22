@@ -36,7 +36,7 @@
   <main class="pt-90" style="padding-top: 0px;">
     <div class="mb-4 pb-4"></div>
     <section class="my-account container">
-        <h2 class="page-title">Orders</h2>
+        <h2 class="page-title">Pedidos</h2>
         <div class="row">
             <div class="col-lg-2">
                  @include('user.account-nav')
@@ -66,6 +66,7 @@
                                 <tr>
                                     <td class="text-center">{{ $order->id }}</td>  
                                     <td class="text-center">{{ $order->name }}</td>
+                                    <td class="text-center">{{ $order->cedula }}</td>
                                     <td class="text-center">{{ $order->phone }}</td>
                                     <td class="text-center">{{ $order->subtotal }}</td>
                                     <td class="text-center">{{ $order->tax }}</td>

@@ -43,6 +43,7 @@
         
         <div class="client-info">
             <div><strong>Cliente:</strong> {{ $invoice->client_name }}</div>
+            <div><strong>Cedula:</strong> {{ $invoice->client_cedula }}</div>
             <div><strong>Email:</strong> {{ $invoice->client_email }}</div>
             <div><strong>Teléfono:</strong> {{ $invoice->client_phone }}</div>
             <div><strong>Dirección:</strong> {{ $invoice->client_address }}</div>

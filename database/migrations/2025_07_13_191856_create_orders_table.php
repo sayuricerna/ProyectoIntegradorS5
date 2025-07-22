@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('tax', 10, 2);
             $table->decimal('total', 10, 2);
             $table->string('name');
+            $table->string('cedula');
             $table->string('phone');
             $table->text('address');
             $table->string('city');

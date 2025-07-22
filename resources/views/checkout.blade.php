@@ -6,13 +6,13 @@
       <h2 class="page-title">Envío y Checkout</h2>
       <div class="checkout-steps">
         <a href="{{ route('cart.index') }}" class="checkout-steps__item active">
-          <span class="checkout-steps__item-title"> Productos del carrito</span>
+          <span class="checkout-steps__item-title">Carrito de Compras</span>
         </a>
-        <a href="javascript::void(0)" class="checkout-steps__item active">
-          <span class="checkout-steps__item-title">Datos de envio</span>
+          <a href="javascript:void(0)" class="checkout-steps__item">
+          <span class="checkout-steps__item-title">Datos para el envío</span>
         </a>
-        <a href="javascript::void(0)" class="checkout-steps__item">
-          <span class="checkout-steps__item-title">Confirmmacion </span>
+        <a href="javascript:void(0)" class="checkout-steps__item">
+          <span class="checkout-steps__item-title">Confirmación </span>
         </a>
       </div>
       <form name="checkout-form" action="{{ route('cart.place.order') }}" method="POST">
@@ -33,6 +33,7 @@
                             <div class="my-account__address-list-item">
                                 <div class="my-account__address-item__detail">
                                     <p>{{$address->name}}</p>
+                                    <p>{{$address->cedula}}</p>
                                     <p>{{$address->address}}</p>
                                     <p>{{$address->reference}}</p>
                                     <p>{{$address->city}}, {{$address->province}},{{$address->country}}</p>
@@ -53,7 +54,14 @@
                     @error('name') <span class="text-danger">{{$message}}</span> @enderror
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
+                <div class="form-floating my-3">
+                  <input type="text" class="form-control" name="cedula" required="" value="{{ old('cedula') }}">
+                  <label for="cedula">Cedula </label>
+                  @error('cedula') <span class="text-danger">{{$message}}</span> @enderror
+                </div>
+              </div>
+              <div class="col-md-3">
                 <div class="form-floating my-3">
                   <input type="text" class="form-control" name="phone" required="" value="{{ old('phone') }}">
                   <label for="phone">Teléfono celular *</label>

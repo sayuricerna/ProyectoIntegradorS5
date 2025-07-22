@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->string('name');
+            $table->string('cedula')->unique();
             $table->string('phone');
             $table->text('address');
             $table->string('city');

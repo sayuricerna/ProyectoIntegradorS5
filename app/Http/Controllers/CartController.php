@@ -68,6 +68,7 @@ class CartController extends Controller
         if (!$address) {
             $request->validate([
                 'name' => 'required',
+                'cedula' =>'required',
                 'phone' => 'required',
                 'zip' => 'required',
                 'province' => 'required',
@@ -78,6 +79,7 @@ class CartController extends Controller
 
             $address = new Address();
             $address->name= $request->name;
+            $address->cedula = $request->cedula;
             $address->phone= $request->phone;
             $address->zip= $request->zip;
             $address->province= $request->province;
@@ -97,6 +99,7 @@ class CartController extends Controller
         $order->tax = Session::get('checkout')['tax'];
         $order->total = Session::get('checkout')['total'];
         $order->name = $address->name;
+        $order->cedula = $address->cedula;
         $order->phone = $address->phone;
         $order->address = $address->address;
         $order->city = $address->city;

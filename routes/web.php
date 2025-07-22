@@ -48,10 +48,11 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/account-orders', [UserController::class,'orders'])->name('user.orders');
     Route::get('/account-order/{order_id}/details', [UserController::class,'orderDetails'])->name(   'user.order.details');
     Route::put('/account-order/cancel', [UserController::class,'cancelOrder'])->name('user.order.cancel');
-    // agg
-    Route::get('/orders/{order}/invoice/download', [InvoiceController::class, 'download'])
-     ->name('invoice.download');});
+    Route::get('/orders/{order}/invoice/download', [InvoiceController::class, 'download']) ->name('invoice.download');
 
+    // Route::get('/account-address', [UserController::class, 'editAdress'])->name('user.address.edit');
+    // Route::post('/account-address', [UserController::class, 'updateAdress'])->name('user.address.update');
+});
 
 // Rutas de administración
 Route::middleware(['auth',AuthAdmin::class])->group(function(){

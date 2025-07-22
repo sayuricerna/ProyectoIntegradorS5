@@ -40,6 +40,7 @@ class InvoiceController extends Controller
             'order_id' => $order->id,
             'user_id' => $user->id,
             'client_name' => $order->name,
+             'client_cedula' => $order->cedula,
             'client_email' => $user->email,
             'client_phone' => $order->phone,
             'client_address' => $order->address,

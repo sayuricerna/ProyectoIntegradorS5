@@ -127,6 +127,7 @@
             <div class="my-account__address-item col-md-6">
                 <div class="my-account__address-item__detail">
                     <p>{{ $order->name }}</p>
+                    <p>{{ $order->cedula }}</p>
                     <p>{{ $order->address }}</p>
                     <p>{{ $order->province }}</p>
                     <p>{{ $order->city }},{{$order->country}}</p>

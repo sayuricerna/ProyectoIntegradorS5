@@ -22,6 +22,7 @@ $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->string('client_name');
             $table->string('client_email');
+            $table->string('client_cedula');
             $table->string('client_phone');
             $table->text('client_address');
             $table->string('client_city');

@@ -60,7 +60,7 @@
 
 .table> :not(caption)>tr>th {
     padding: 0.625rem 1.5rem .25rem !important;
-    background-color: #6a6e51 !important;
+    background-color: #000000ff !important;
 }
 
 .table-bordered>:not(caption)>*>* {
@@ -95,7 +95,7 @@
 .table-bordered> :not(caption)>tr>th,
 .table-bordered> :not(caption)>tr>td {
     border-width: 1px 1px;
-    border-color: #6a6e51;
+    border-color: #000000ff;
 }
 </style>
 <main class="pt-90" style="padding-top: 0px;">
@@ -114,7 +114,7 @@
                                 <h5>Detalles del Pedido</h5>
                             </div>
                             <div class="col-6 text-right">
-                                <a class="btn btn-sm btn-danger" href="{{ route('user.orders') }}">Back</a>
+                                <a class="btn btn-sm btn-primary" href="{{ route('user.orders') }}">Back</a>
                             </div>
                         </div>
                     </div>
@@ -216,54 +216,49 @@
                     <div class="my-account__address-item col-md-6">
                         <div class="my-account__address-item__detail">
                             <p>{{ $order->name }}</p>
-                            <p>{{ $order->address }}</p>
-                            <p>{{ $order->province }}</p>
-                            <p>{{ $order->city }},{{$order->country}}</p>
-                            <p>{{ $order->reference }}</p>
-                            <p>{{ $order->zip }}</p>
-                            <br>
+                            <p>Cédula :{{ $order->cedula }}</p>
+                            <p>Provincia :{{ $order->province }}</p>
+                            <p>Ciudad :{{ $order->city }},{{$order->country}}</p>
+                            <p>ZIP :{{ $order->zip }}</p>
+                            <p>Dirección :{{ $order->address }}</p>
+                            <p>Referencia :{{ $order->reference }}</p>
                             <p>Teléfono celular : {{ $order->phone }}</p>
                         </div>
                     </div>
-                </div>
+                </div> 
                 <div class="wg-box mt-5">
                     <h5>Detalles de Pago</h5>
-                    <table class="table table-striped table-bordered table-transaction">
-                        <tbody>
-                            <tr>
-                                <th>Subtotal</th>
-                                <td> {{ $order->subtotal }}</td>
-                                <th>IVA</th>
-                                <td> {{ $order->tax }}</td>
-                            </tr>
-                            <tr>
-                                <th>Total</th>
-                                <td> {{ $order->total }}</td>
-                                <th>Modo de Pago</th>
-                                <td> {{ $transaction->mode }}</td>
-                                <th>Estado</th>
-                                <td>  
-                                    @if ($transaction->status == 'approved')
-                                    <span class="badge bg-success">Aprovado</span>
-                                    @elseif ($transaction->status == 'declined')
-                                    <span class="badge bg-danger">Rechazado</span>
-                                    @elseif ($transaction->status == 'declined')
-                                    <span class="badge bg-danger">Reembolso</span>
-                                    @else 
-                                    <span class="badge bg-warning">Pendiente</span> 
-                                    @endif
-                                </td>
-                            </tr>
-                        </tbody>
+                    <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col">IVA</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Modo de Pago</th>
+                        <th scope="col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>${{ $order->subtotal }}</td>
+                        <td>${{ $order->tax }}</td>
+                        <td>${{ $order->total }}</td>
+                        <td>{{ $transaction->mode }}</td>
+                        <td>
+                            @if ($transaction->status == 'approved')
+                            <span class="badge bg-success">Aprovado</span>
+                            @elseif ($transaction->status == 'declined')
+                            <span class="badge bg-danger">Rechazado</span>
+                            @elseif ($transaction->status == 'declined')
+                            <span class="badge bg-danger">Reembolso</span>
+                            @else 
+                            <span class="badge bg-warning">Pendiente</span> 
+                            @endif
+                        </td>
+                        </tr>
+                    </tbody>
                     </table>
                 </div>
-                {{-- <div class="wg-box mt-5 ">
-                    <form action="{{ route('user.order.invoice', ['order_id' => $order->id]) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-primary">Descargar Factura</button>
-                    </form>
-                </div> --}}
-
                 @if ($order->status == 'ordered' || $order->status == 'pending')
                 {{-- CANCELACION DE PEDIDO --}}
                 <div class="wg-box mt-5 text-right">
@@ -271,7 +266,7 @@
                         @csrf
                         @method('PUT') 
                         <input type="hidden" name="order_id" value="{{ $order->id }}">
-                        <button type="button" class="btn btn-danger cancel-order">Cancelar Pedido</button>
+                        <button type="button" class="btn btn-primary cancel-order">Cancelar Pedido</button>
                     </form>
                 </div>                    
                 @endif
