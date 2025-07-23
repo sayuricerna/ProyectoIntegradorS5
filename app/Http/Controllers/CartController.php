@@ -12,8 +12,18 @@ use App\Models\Address;
 use Session;
 use Surfsidemedia\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
+use App\Services\PaymentProcessor; 
+use App\Services\Payments\BankPaymentStrategy;
+use App\Services\Payments\StripePaymentStrategy; 
+use App\Http\Controllers\Admin\InvoiceController; 
 class CartController extends Controller
 {
+    protected $paymentProcessor;
+
+    public function __construct(PaymentProcessor $paymentProcessor)
+    {
+        $this->paymentProcessor = $paymentProcessor;
+    }
     public function index()
     {
         $items = Cart::instance('cart')->content();
@@ -58,7 +68,8 @@ class CartController extends Controller
             return redirect()->route('login');
         }
         $address = Address::where('user_id', Auth::user()->id)->where('is_default', 1)->first();
-        return view('checkout', compact('address'));
+        $stripeKey = env('STRIPE_KEY');
+        return view('checkout', compact('address','stripeKey'));
     }
     public function placeOrder( Request $request )
     {
@@ -117,25 +128,49 @@ class CartController extends Controller
             $orderItem->quantity = $item->qty;
             $orderItem->save();
         }
-        
-        if ($request->mode == 'stripe') {
-        } elseif ($request->mode == 'tranference') {
-            $transaction = new Transaction();
-            $transaction->user_id = $user_id;
-            $transaction->order_id = $order->id;
-            $transaction->mode = $request->input('mode');
-            $transaction->status = 'pending';
-            $transaction->save();
+    
+
+        // STRATEGY 
+        switch ($request->mode) {
+            case 'stripe':
+                $this->paymentProcessor->setPaymentStrategy(new StripePaymentStrategy());
+                break;
+            case 'tranference': 
+                $this->paymentProcessor->setPaymentStrategy(new BankPaymentStrategy());
+                break;
+            default:
+                return redirect()->back()->with('error', 'Método de pago no soportado.');
         }
-        Cart::instance('cart')->destroy();
-        Session::forget('checkout');
-        Session::put('order_id',$order->id);
-                    // Generar la factura (en segundo plano)
-        dispatch(function () use ($order) {
-            $invoiceController = new InvoiceController();
-            $invoiceController->generate($order);
-        });
-        return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
+        $paymentSuccess = $this->paymentProcessor->process($order, $request);
+        if (!$paymentSuccess) {
+            return redirect()->back()->with('error', 'El pago no pudo ser procesado.');
+        }
+
+        if ($paymentSuccess) {
+                    Cart::instance('cart')->destroy();
+                    Session::forget('checkout');
+                    Session::put('order_id',$order->id);
+
+                    // Generar la factura automáticamente para AMBOS métodos de pago
+                    $invoiceController = new InvoiceController();
+                    $invoiceController->generate($order); // No necesitamos capturar el retorno si solo genera
+
+                    // Redirigir a la vista de confirmación
+                    return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
+                } else {
+                    // Si $paymentSuccess es false, es porque hubo un error (Stripe falló o requirió acción)
+                    // Ya la estrategia de pago habrá puesto un mensaje en la sesión (Session::flash('error'))
+                    return redirect()->back(); // Redirige de vuelta al checkout con el error
+                }
+        // Cart::instance('cart')->destroy();
+        // Session::forget('checkout');
+        // Session::put('order_id',$order->id);
+
+        // if ($order) {
+        // $invoiceController = new InvoiceController();
+        // $invoice = $invoiceController->generate($order);
+        // return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
+        // }
     }
     public function setAmountForCheckout()
     {
@@ -161,4 +196,5 @@ class CartController extends Controller
         }
         return redirect()->route('cart.index');
     }
+
 }

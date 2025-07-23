@@ -12,16 +12,12 @@ class InvoiceController extends Controller
 {
     public function generate(Order $order)
     {
-        // Verificar si ya existe factura
         if ($order->invoice) {
             return $order->invoice;
         }
-
-        // Obtener datos necesarios
         $user = $order->user;
         $transaction = $order->transaction;
 
-        // items de factura
         $items = $order->orderItems->map(function ($item) {
             return [
                 'name' => $item->product->name,
@@ -33,7 +29,6 @@ class InvoiceController extends Controller
             ];
         });
 
-        // Crear la factura
         $invoice = Invoice::create([
             'invoice_number' => $this->generateInvoiceNumber(),
             'issue_date' => now(),
@@ -56,9 +51,7 @@ class InvoiceController extends Controller
             'pdf_path' => ''
         ]);
 
-        // Generar PDF
         $this->generatePdf($invoice, $order);
-
         return $invoice;
     }
 
@@ -90,19 +83,15 @@ class InvoiceController extends Controller
 
     public function download(Order $order)
     {
-        // Verificar que la orden pertenece al usuario autenticado
         if (auth()->id() !== $order->user_id) {
             abort(403);
         }
 
-        // Generar factura si no existe
         if (!$order->invoice) {
             $invoice = $this->generate($order);
         } else {
             $invoice = $order->invoice;
         }
-
-        // Descargar el PDF
         return response()->download(
             Storage::path($invoice->pdf_path),
             'factura_'. $invoice->invoice_number . '.pdf'

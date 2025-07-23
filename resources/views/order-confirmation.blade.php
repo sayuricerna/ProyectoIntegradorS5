@@ -26,6 +26,22 @@
           <h3>Su orden ha sido completada</h3>
           <p>Gracias por su pedido, enviar su comprobante por whatsapp para proceder con el envío </p>
         </div>
+                @php
+            // Obtén el método de pago de la transacción asociada a la orden
+            $transaction = $order->transaction; // Asumiendo que Order tiene una relación hasOne con Transaction
+            $paymentMethod = $transaction ? $transaction->mode : 'desconocido';
+            $paymentStatus = $transaction ? $transaction->status : 'desconocido';
+        @endphp
+
+        @if ($paymentMethod === 'tranference')
+            <p>Tu pago por **Transferencia Bancaria** está **pendiente de revisión**.</p>
+            <p>Una vez que confirmemos la transferencia, procesaremos tu pedido.</p>
+        @elseif ($paymentMethod === 'stripe')
+            <p>Tu pago con **Tarjeta** ha sido **{{ $paymentStatus === 'approved' ? 'APROBADO' : 'procesado' }}**.</p>
+            <p>Recibirás una confirmación por correo electrónico en breve.</p>
+        @else
+            <p>El método de pago es: {{ $paymentMethod }} y el estado es {{ $paymentStatus }}.</p>
+        @endif
         <div class="order-info">
           <div class="order-info__item">
             <label>Pedido número</label>

@@ -29,30 +29,60 @@ Laravel, PHP, HTML, CSS, JavaScript, XAMPP, bootstrap
 - MySQL 5.7+ o MariaDB 10.3+
 - Servidor web (Apache/Nginx) o PHP built-in server
 
-### 1. Clonar repositorio
-```bash
-git clone https://github.com/sayuricerna/ProyectoIntegradorS5.git
-cd ProyectoIntegradorS5-main
-composer install
-npm install
-copy .env.example .env
-php artisan key:generate
+### PASOS
+### Base de datos
+- Crear base de datos ecommercepi en PhpMyAdmin
+- importar el archivo ecommercepi.sql
+**Usuarios**
+admin@admin.com
+administrador
 
-Editar el archivo .env
+user@user.com
+usuario1
+### Deployment
+```bash
+git clone https://github.com/sayuricerna/ProyectoIntegradorS5.git 
+```
+``` bash
+cd ProyectoIntegradorS5-main
+``` 
+``` bash
+composer install
+``` 
+``` bash
+npm install
+``` 
+``` bash
+copy .env.example .env
+``` 
+``` bash
+php artisan key:generate
+``` 
+### Editar  **.env**
+``` bash
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=swinroom_db
+DB_DATABASE=ecommercepi
 DB_USERNAME=root
-DB_PASSWORD=pw
+DB_PASSWORD=
+``` 
+``` bash
 php artisan migrate
+```
+``` bash
 php artisan storage:link
-npm run dev
-php artisan serve
 
 ```
+``` bash
+npm run dev
+```
+``` bash
+php artisan serve
+```
 
-## DEPENDECIAS
+
+## DEPENDENCIAS
 
 Laravel 10	Framework backend
 Bootstrap 5	Framework CSS
@@ -73,7 +103,7 @@ php artisan storage:link
 ### Monitorizar cambios en Vite
 npm run watch
 
-Descarga del .zip o Git clone
+<!-- Descarga del .zip o Git clone
 cd projectpath
 composer install
 npm install
@@ -87,10 +117,10 @@ DB_DATABASE=nombreDeBaseDeDatos
 DB_USERNAME=root
 DB_PASSWORD=
 php artisan migrate
-<!-- php artisan db:seed -->
+php artisan db:seed
 php artisan storage:link
 npm run dev
-php artisan serve
+php artisan serve -->
 
 
 

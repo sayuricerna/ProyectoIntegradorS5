@@ -13,7 +13,7 @@ class Brand extends Model
     }
     // Observer para el link slug
     // Este método se ejecuta antes de crear o actualizar un modelo
-    // y asegura que el slug se genere a partir del nombre de la marca
+    // y asegura que el link único de almacenamiento se genere a partir del nombre de la marca
     protected static function boot()
     {
         parent::boot();
