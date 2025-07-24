@@ -1,42 +1,38 @@
 # 📚 Proyecto Integrador - Quinto Semestre
 Proyecto Integrador de **5to semestre** de la carrera de Ingeniería de Software, grupo **1**. Proyecto para una tienda de ropa. 
 
+## Integrantes
+WILTHON BAQUE
+MICHAEL CASTRO
+SAYURI CERNA
+
 ## Rutas de usuarios
-
-#### /admin
-#### /account-dashboard
-
-## Comandos
-
-#### php artisan serve
-#### npm run dev 
+- /admin
+- /account-dashboard
 
 ## Materias involucradas
-
 - Aplicaciones distribuidas
 - Construcción de software
 
 ## Tecnologías utilizadas
-
 Laravel, PHP, HTML, CSS, JavaScript, XAMPP, bootstrap
 
-
-## INSTALACIÓN
-## 📦 Requisitos Técnicos
+### 📦 Requisitos Técnicos
 - PHP 8.0 o superior
 - Composer 2.x
 - Node.js 16.x o superior
 - MySQL 5.7+ o MariaDB 10.3+
 - Servidor web (Apache/Nginx) o PHP built-in server
 
-### PASOS
-### Base de datos
+## PASOS DE INSTALACIÓN
+### 1. Base de datos
 - Crear base de datos ecommercepi en PhpMyAdmin
 - importar el archivo ecommercepi.sql
 **Usuarios**
 - admin@admin.com:ADMINISTRADOR
 - user@user.com:usuario1
-### Deployment
+
+### 2. Instalación
 ```bash
 git clone https://github.com/sayuricerna/ProyectoIntegradorS5.git 
 ```
@@ -55,7 +51,7 @@ copy .env.example .env
 ``` bash
 php artisan key:generate
 ``` 
-### Editar  **.env**
+### 3. Editar archivo **.env**
 ``` bash
 DB_CONNECTION=mysql
 DB_HOST=localhost
@@ -80,7 +76,6 @@ php artisan serve
 
 
 ## DEPENDENCIAS
-
 Laravel 10	Framework backend
 Bootstrap 5	Framework CSS
 jQuery	Manipulación DOM
