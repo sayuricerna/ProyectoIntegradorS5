@@ -28,7 +28,7 @@ Laravel, PHP, HTML, CSS, JavaScript, XAMPP, bootstrap
 ### 1. Base de datos
 - Crear base de datos ecommercepi en PhpMyAdmin
 - importar el archivo ecommercepi.sql
-**Usuarios**
+#### **Usuarios**
 - admin@admin.com:ADMINISTRADOR
 - user@user.com:usuario1
 
