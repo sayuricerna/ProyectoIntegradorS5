@@ -14440,7 +14440,7 @@ button.js-add-wishlist.active .flaticon.flaticon-heart, a.add-to-wishlist.active
     height: 3.75rem;
     font-size: 0.875rem; }
   .shopping-cart__totals {
-    border: 1px solid #222;
+    /* border: 1px solid #222; */
     margin-bottom: 1.25rem;
     padding: 2.5rem 2.5rem 0.5rem;
     max-width: 100%; }
@@ -14702,7 +14702,7 @@ button.js-add-wishlist.active .flaticon.flaticon-heart, a.add-to-wishlist.active
       text-align: center; }
   .order-complete .order-info {
     width: 100%;
-    border: 2px dashed #767676;
+    /* border: 2px dashed #767676; */
     padding: 2.5rem;
     display: flex;
     gap: 1rem; }

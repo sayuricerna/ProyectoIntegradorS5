@@ -50,7 +50,7 @@
                     <div class="col-6">
                       <form method="POST" action="{{ route('wishlist.move.to.cart', ['rowId'=>$item->rowId]) }}">
                         @csrf
-                        <button type="submit" class="btn btn-sm btn-warning">Mover al carrito</button>
+                        <button type="submit" class="btn btn-sm btn-light">Mover al carrito</button>
                       </form>
                     </div>
                     <div class="col-6">
@@ -76,7 +76,7 @@
             <form method="POST" action="{{ route('wishlist.empty') }}">
               @csrf
               @method('DELETE')
-              <button type="submit" class="btn btn-light">Vacias lista de Deseos</button>
+              <button type="submit" class="btn btn-primary">Limpiar</button>
           </div>
         </div>
         @else

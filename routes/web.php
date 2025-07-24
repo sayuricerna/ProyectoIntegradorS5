@@ -23,7 +23,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop', [ShopController::class,'index'])->name('shop.index');
 Route::get('/shop/{product_slug}', [ShopController::class,'productDetails'])->name('shop.product.details');
 
-// Rutas del carrito
+// carrito
 Route::get('/cart', [CartController::class,'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class,'addToCart'])->name('cart.add');
 Route::put('cart/increase-quantity/{rowId}', [CartController::class,'increaseCartQuantity'])->name('cart.qty.increase');
@@ -31,7 +31,7 @@ Route::put('cart/decrease-quantity/{rowId}', [CartController::class,'decreaseCar
 Route::delete('cart/remove/{rowId}', [CartController::class,'removeItem'])->name('cart.item.remove');
 Route::delete('cart/clear', [CartController::class,'emptyCart'])->name('cart.empty');
 
-// Rutas de la lista de deseos (wishlist)
+// lista de deseos (wishlist)
 Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 Route::delete('/wishlist/remove/{rowId}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.item.remove');
@@ -42,7 +42,7 @@ Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkou
 Route::post('/checkout/place-order', [CartController::class, 'placeOrder'])->name('cart.place.order');
 Route::get('/checkout/order-confirmation/{order_id}', [CartController::class, 'orderConfirmation'])->name('cart.order.confirmation');
 
-// Rutas de usuario autenticado
+// Rutas de usuario loggeado
 Route::middleware(['auth'])->group(function(){
     Route::get('/account-dashboard', [UserController::class,'index'])->name('user.index');
     Route::get('/account-orders', [UserController::class,'orders'])->name('user.orders');
@@ -54,11 +54,11 @@ Route::middleware(['auth'])->group(function(){
     // Route::post('/account-address', [UserController::class, 'updateAdress'])->name('user.address.update');
 });
 
-// Rutas de administración
+//  administración
 Route::middleware(['auth',AuthAdmin::class])->group(function(){
     Route::get('/admin',[DashboardController::class,'index'])->name('admin.index');
     
-    // Marcas (Brands)
+    // Marcas 
     Route::get('/admin/brands',[BrandController::class,'brands'])->name('admin.brands');
     Route::get('/admin/brand-add',[BrandController::class,'addBrand'])->name('admin.brand.add');
     Route::post('/admin/brand/store',[BrandController::class,'storeBrand'])->name('admin.brand.store');
@@ -82,7 +82,7 @@ Route::middleware(['auth',AuthAdmin::class])->group(function(){
     Route::put('/admin/product/update',[ProductController::class,'updateProduct'])->name('admin.product.update');
     Route::delete('/admin/product/{id}/delete',[ProductController::class,'deleteProduct'])->name('admin.product.delete');
 
-    // Pedidos (Orders)
+    // Pedidos
     Route::get('admin/orders', [OrderController::class, 'orders'])->name('admin.orders');
     Route::get('admin/order/details/{id}', [OrderController::class, 'orderDetails'])->name('admin.order.details');
     Route::put('admin/order/update-status', [OrderController::class, 'updateOrderStatus'])->name('admin.order.status.update');

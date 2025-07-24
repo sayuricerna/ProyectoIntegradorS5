@@ -164,10 +164,10 @@
         </div>
       </div>
     @endforeach
-    </div><!-- /.row -->
-    <div class="text-center mt-2">
+    </div><!--  -->
+    {{-- <div class="text-center mt-2">
     <a class="btn-link btn-link_lg default-underline text-uppercase fw-medium" href="#">Cargar más</a>
-    </div>
+    </div> --}}
     </section>
   </div> 
 </main>

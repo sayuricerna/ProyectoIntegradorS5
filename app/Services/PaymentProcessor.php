@@ -19,7 +19,7 @@ class PaymentProcessor
     public function process(Order $order, Request $request): bool
     {
         if (!$this->paymentStrategy) {
-            throw new InvalidArgumentException("No payment strategy has been set.");
+            throw new InvalidArgumentException("No hay payment strategy set");
         }
         return $this->paymentStrategy->processPayment($order, $request);
     }

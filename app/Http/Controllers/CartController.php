@@ -18,6 +18,7 @@ use App\Services\Payments\StripePaymentStrategy;
 use App\Http\Controllers\Admin\InvoiceController; 
 class CartController extends Controller
 {
+    // CODIGO COMENTADO FUNCIONANDO
     protected $paymentProcessor;
 
     public function __construct(PaymentProcessor $paymentProcessor)
@@ -150,27 +151,12 @@ class CartController extends Controller
                     Cart::instance('cart')->destroy();
                     Session::forget('checkout');
                     Session::put('order_id',$order->id);
-
-                    // Generar la factura automáticamente para AMBOS métodos de pago
                     $invoiceController = new InvoiceController();
-                    $invoiceController->generate($order); // No necesitamos capturar el retorno si solo genera
-
-                    // Redirigir a la vista de confirmación
+                    $invoiceController->generate($order); 
                     return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
                 } else {
-                    // Si $paymentSuccess es false, es porque hubo un error (Stripe falló o requirió acción)
-                    // Ya la estrategia de pago habrá puesto un mensaje en la sesión (Session::flash('error'))
-                    return redirect()->back(); // Redirige de vuelta al checkout con el error
+                    return redirect()->back(); 
                 }
-        // Cart::instance('cart')->destroy();
-        // Session::forget('checkout');
-        // Session::put('order_id',$order->id);
-
-        // if ($order) {
-        // $invoiceController = new InvoiceController();
-        // $invoice = $invoiceController->generate($order);
-        // return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
-        // }
     }
     public function setAmountForCheckout()
     {

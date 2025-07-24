@@ -34,11 +34,11 @@
         @endphp
 
         @if ($paymentMethod === 'tranference')
-            <p>Tu pago por **Transferencia Bancaria** está **pendiente de revisión**.</p>
+            <p>Tu pago por <strong> Transferencia Bancaria </strong>está pendiente de revisión</p>
             <p>Una vez que confirmemos la transferencia, procesaremos tu pedido.</p>
         @elseif ($paymentMethod === 'stripe')
-            <p>Tu pago con **Tarjeta** ha sido **{{ $paymentStatus === 'approved' ? 'APROBADO' : 'procesado' }}**.</p>
-            <p>Recibirás una confirmación por correo electrónico en breve.</p>
+            <p>Tu pago con Tarjeta ha sido <strong>{{ $paymentStatus === 'approved' ? 'APROBADO' : 'procesado' }}</strong></p>
+            <p>Recibirá una confirmación por correo electrónico en breve</p>
         @else
             <p>El método de pago es: {{ $paymentMethod }} y el estado es {{ $paymentStatus }}.</p>
         @endif

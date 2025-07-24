@@ -25,4 +25,7 @@ class Product extends Model
             $product->slug = Str::slug($product->name);
         });
     }
+
+
+
 }
