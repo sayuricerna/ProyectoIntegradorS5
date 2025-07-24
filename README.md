@@ -76,12 +76,14 @@ php artisan serve
 
 
 ## DEPENDENCIAS
-Laravel 10	Framework backend
-Bootstrap 5	Framework CSS
-jQuery	Manipulación DOM
-Laravel UI	Autenticación
-Intervention Image	Procesamiento de imágenes
-Fancybox	Galería de productos
+Laravel v12.0	Framework backend,
+jQuery	Manipulación DOM,
+shoppingcart 2.0,
+Laravel UI	Autenticación v4.6,
+Intervention Image	Procesamiento de imágenes v1.2,
+Fancybox	Galería de productos,
+Stripe 17.4,
+dompdf v3.1
 
 ### Limpiar caché
 php artisan optimize:clear
