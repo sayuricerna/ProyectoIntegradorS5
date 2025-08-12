@@ -39,10 +39,23 @@ class CartController extends Controller
     }
     public function increaseCartQuantity($rowId)
     {
-        $product = Cart::instance('cart')->get($rowId);
-        $qty = $product->qty +1;
-        Cart::instance('cart')->update($rowId, $qty);
-        return redirect()->back();
+            $item = Cart::instance('cart')->get($rowId);
+    $product = Product::find($item->id); // Buscamos el producto en la base de datos
+
+    // Verificamos si la cantidad en el carrito ya es igual o mayor al stock
+    if ($item->qty >= $product->quantity) {
+        // Si no hay más stock, regresamos con un mensaje de error
+        return redirect()->back()->with('error_message', 'Se ha alcanzado el stock máximo para este producto.');
+    }
+
+    // Si hay stock, aumentamos la cantidad
+    $qty = $item->qty + 1;
+    Cart::instance('cart')->update($rowId, $qty);
+    return redirect()->back();
+        // $product = Cart::instance('cart')->get($rowId);
+        // $qty = $product->qty +1;
+        // Cart::instance('cart')->update($rowId, $qty);
+        // return redirect()->back();
 
     }
     public function decreaseCartQuantity($rowId)
@@ -74,6 +87,15 @@ class CartController extends Controller
     }
     public function placeOrder( Request $request )
     {
+        // Validacion de stock
+        foreach (Cart::instance('cart')->content() as $item) {
+            $product = Product::find($item->id);
+            if ($product->quantity < $item->qty) {
+                // Redirige al carrito si no hay stock suficiente para algún producto
+                return redirect()->route('cart.index')->with('error_message', 'El producto "' . $product->name . '" ya no tiene suficiente stock. Por favor, revisa tu carrito.');
+            }
+        }
+        // Validacion de direccion
         $user_id = Auth::user()->id;
         $address = Address::where('user_id', $user_id)->where('is_default', true)->first();
 
@@ -103,6 +125,7 @@ class CartController extends Controller
             $address->is_default = true;
             $address->save();
         }
+        // Crear la orden
         $this->setAmountForCheckout();
         $order = new Order();
         $order->user_id = $user_id;
@@ -148,6 +171,18 @@ class CartController extends Controller
         }
 
         if ($paymentSuccess) {
+                // ===================== INICIO: BLOQUE PARA DESCONTAR STOCK =====================
+            foreach ($order->orderItems as $item) {
+                $product = Product::find($item->product_id);
+                $product->quantity -= $item->quantity; // Restamos la cantidad comprada
+                // Si el stock llega a 0, actualizamos el estado
+                if ($product->quantity <= 0) {
+                    $product->stock_status = 'outofstock';
+                }
+                
+                $product->save(); // Guardamos los cambios en el producto
+            }
+
                     Cart::instance('cart')->destroy();
                     Session::forget('checkout');
                     Session::put('order_id',$order->id);
@@ -155,6 +190,8 @@ class CartController extends Controller
                     $invoiceController->generate($order); 
                     return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
                 } else {
+                    // Si el pago falla se elimina la orden
+                    $order->delete(); 
                     return redirect()->back(); 
                 }
     }

@@ -4,6 +4,13 @@
     <div class="mb-4 pb-4"></div>
     <section class="shop-checkout container">
       <h2 class="page-title">Carrito de compras</h2>
+      {{-- Mensaje de error de stock insuficiente --}}
+        @if(session('error_message'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error_message') }}
+            </div>
+        @endif
+
       <div class="checkout-steps">
         <a href="javascript:void(0)" class="checkout-steps__item active">
           <span class="checkout-steps__item-title"> Carrito de Compras</span>
@@ -58,6 +65,7 @@
                     <form method="POST" action="{{ route('cart.qty.increase',['rowId'=>$item->rowId]) }}">
                       @csrf
                       @method('PUT')
+                      
                       <div class="qty-control__increase">+</div>
                     </form>
                     
