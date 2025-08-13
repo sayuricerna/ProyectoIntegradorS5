@@ -167,6 +167,16 @@
                     @error('sale_price') <span class='alert alert-danger text-center'>{{$message}}</span> @enderror
                 </div>
 
+                {{-- Añadido el checkbox para la oferta --}}
+                <div class="cols gap22">
+                    <fieldset class="name">
+                        <div class="body-title mb-10">En Oferta</div>
+                        <div class="mb-10">
+                            <input type="hidden" name="on_sale" value="0">
+                            <input type="checkbox" name="on_sale" value="1" {{ $product->on_sale ? 'checked' : '' }}>
+                        </div>
+                    </fieldset>
+                </div>
 
                 <div class="cols gap22">
                     <fieldset class="name">

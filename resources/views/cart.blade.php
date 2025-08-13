@@ -104,8 +104,7 @@
             </form>
           </div>
         </div>          
-        
-
+      
         <div class="shopping-cart__totals-wrapper">
           <div class="sticky-content">
             <div class="shopping-cart__totals">

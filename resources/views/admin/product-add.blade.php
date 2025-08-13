@@ -159,6 +159,15 @@
                             required="">
                     </fieldset>
                     @error('sale_price') <span class='alert alert-danger text-center'>{{$message}}</span> @enderror
+                    {{-- CHECKBOX DE DESCUENTO  --}}
+                    <fieldset class="name">
+                        <div class="body-title mb-10">¿Activar Oferta?</div>
+                        <label class="switch">
+                            <input type="checkbox" name="on_sale" value="1">
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="text-tiny mt-1">Marca esta casilla para mostrar el precio de descuento.</div>
+                    </fieldset>
                 </div>
 
 

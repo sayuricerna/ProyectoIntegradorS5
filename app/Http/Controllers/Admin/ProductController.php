@@ -51,6 +51,9 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->regular_price = $request->regular_price;
         $product->sale_price = $request->sale_price;
+     
+        $product->on_sale = $request->input('on_sale', 0); 
+
         $product->sku = $request->sku;
         $product->stock_status = $request->stock_status;
         $product->featured = $request->featured;
@@ -123,6 +126,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->regular_price = $request->regular_price;
         $product->sale_price = $request->sale_price;
+        $product->on_sale = $request->input('on_sale');
         $product->sku = $request->sku;
         $product->stock_status = $request->stock_status;
         $product->featured = $request->featured;

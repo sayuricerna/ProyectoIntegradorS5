@@ -31,18 +31,51 @@ class CartController extends Controller
         return view('cart', compact('items'));
 
     }
+    // public function addToCart(Request $request)
+    // {
+    //     Cart::instance('cart')->add( $request->id, $request->name, $request->quantity, $request->price )->associate('App\Models\Product');  
+    //     return redirect()->back();
+
+    // }
     public function addToCart(Request $request)
     {
-        Cart::instance('cart')->add( $request->id, $request->name, $request->quantity, $request->price )->associate('App\Models\Product');  
-        return redirect()->back();
+        $product = Product::find($request->id);
+        if (!$product) {
+            return redirect()->back()->with('error', 'El producto no existe.');
+        }
+        $priceToAdd = 0.0;
 
+        if ($product->on_sale && !is_null($product->sale_price) && $product->sale_price > 0) {
+            $priceToAdd = $product->sale_price;
+        }
+        elseif (!is_null($product->regular_price) && $product->regular_price > 0) {
+            $priceToAdd = $product->regular_price;
+        }
+        else {
+            $priceFromRequest = (float) $request->price;
+            if ($priceFromRequest > 0) {
+                $priceToAdd = $priceFromRequest;
+            }
+        }
+        if ($priceToAdd <= 0) {
+            return redirect()->back()->with('error', 'No se pudo determinar un precio válido para el producto.');
+        }
+        Cart::instance('cart')->add(
+            $product->id,
+            $product->name,
+            $request->quantity,
+            $priceToAdd
+        )->associate('App\Models\Product');
+
+        return redirect()->back()->with('success', 'Producto agregado al carrito.');
     }
+
+
     public function increaseCartQuantity($rowId)
     {
             $item = Cart::instance('cart')->get($rowId);
     $product = Product::find($item->id); // Buscamos el producto en la base de datos
 
-    // Verificamos si la cantidad en el carrito ya es igual o mayor al stock
     if ($item->qty >= $product->quantity) {
         // Si no hay más stock, regresamos con un mensaje de error
         return redirect()->back()->with('error_message', 'Se ha alcanzado el stock máximo para este producto.');
@@ -183,12 +216,12 @@ class CartController extends Controller
                 $product->save(); // Guardamos los cambios en el producto
             }
 
-                    Cart::instance('cart')->destroy();
-                    Session::forget('checkout');
-                    Session::put('order_id',$order->id);
-                    $invoiceController = new InvoiceController();
-                    $invoiceController->generate($order); 
-                    return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
+                Cart::instance('cart')->destroy();
+                Session::forget('checkout');
+                Session::put('order_id',$order->id);
+                $invoiceController = new InvoiceController();
+                $invoiceController->generate($order); 
+                return redirect()->route('cart.order.confirmation', ['order_id' => $order->id]);
                 } else {
                     // Si el pago falla se elimina la orden
                     $order->delete(); 

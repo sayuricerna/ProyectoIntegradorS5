@@ -334,15 +334,12 @@
 </script>
 @endsection --}}
 
-@push('scripts') {{-- ¡Aquí empieza la sección de scripts para ser inyectada en @stack("scripts")! --}}
+@push('scripts') 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    // 1. Inicializa Stripe con tu clave publicable
-    // Asegúrate de que la variable $stripeKey esté siendo pasada desde el controlador a esta vista
     const stripe = Stripe('{{ $stripeKey }}');
     const elements = stripe.elements();
 
-    // 2. Estilos para el elemento de la tarjeta (opcional, pero mejora la apariencia)
     const style = {
         base: {
             color: '#32325d',
@@ -359,13 +356,10 @@
         }
     };
 
-    // 3. Crea una instancia del elemento de tarjeta
     const card = elements.create('card', { style: style });
 
-    // 4. Monta el elemento de tarjeta en el contenedor 'stripe-card-element'
     card.mount('#stripe-card-element');
 
-    // 5. Maneja errores de validación en tiempo real en el elemento de la tarjeta
     card.on('change', function(event) {
         const displayError = document.getElementById('card-errors');
         if (event.error) {
@@ -374,13 +368,10 @@
             displayError.textContent = '';
         }
     });
-
-    // 6. Lógica para mostrar/ocultar el elemento de Stripe basado en la selección del radio button
     const paymentModeRadios = document.querySelectorAll('input[name="mode"]');
     const stripeCardElementDiv = document.getElementById('stripe-card-element');
     const submitButton = document.getElementById('submit-button');
 
-    // Función para actualizar la visibilidad y el estado del botón
     function updateStripeVisibility() {
         const selectedMode = document.querySelector('input[name="mode"]:checked').value;
         if (selectedMode === 'stripe') {
@@ -398,14 +389,11 @@
         radio.addEventListener('change', updateStripeVisibility);
     });
 
-    // Asegúrate de que el estado inicial sea correcto al cargar la página
     updateStripeVisibility();
 
-
-    // 7. Intercepta el envío del formulario para procesar con Stripe.js
     const form = document.forms['checkout-form']; // Referencia al formulario por su atributo 'name'
     form.addEventListener('submit', async function(event) {
-        event.preventDefault(); // ¡IMPIDE EL ENVÍO NORMAL DEL FORMULARIO!
+        event.preventDefault(); // IMPIDE EL ENVÍO NORMAL DEL FORMULARIO
 
         submitButton.disabled = true; // Deshabilita el botón para evitar doble envío
         document.getElementById('card-errors').textContent = ''; // Limpia errores previos
@@ -420,36 +408,23 @@
                 billing_details: {
                     name: document.querySelector('input[name="name"]') ? document.querySelector('input[name="name"]').value : '{{ Auth::user()->name ?? "" }}',
                     email: '{{ Auth::user()->email ?? "" }}',
-                    // Puedes añadir más campos de billing_details si son requeridos por tu configuración de Stripe o necesitas recolectarlos.
-                    // Por ejemplo:
-                    // address: {
-                    //    line1: document.querySelector('input[name="address"]').value,
-                    //    city: document.querySelector('input[name="city"]').value,
-                    //    postal_code: document.querySelector('input[name="zip"]').value,
-                    //    state: document.querySelector('input[name="province"]').value,
-                    //    country: 'EC', // O el código ISO del país que uses
-                    // },
+
                 },
             });
 
             if (error) {
-                // Muestra los errores al usuario
                 const errorElement = document.getElementById('card-errors');
                 errorElement.textContent = error.message;
-                submitButton.disabled = false; // Habilita el botón de nuevo
+                submitButton.disabled = false; 
             } else {
-                // Si no hay errores, añade el ID del PaymentMethod a un campo oculto del formulario
                 const hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');
                 hiddenInput.setAttribute('name', 'payment_method_id');
                 hiddenInput.setAttribute('value', paymentMethod.id);
                 form.appendChild(hiddenInput);
-
-                // Envía el formulario programáticamente con el nuevo campo oculto
                 form.submit();
             }
         } else {
-            // Si el modo no es Stripe, simplemente envía el formulario
             form.submit();
         }
     });

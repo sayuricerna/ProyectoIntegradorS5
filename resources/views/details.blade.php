@@ -75,11 +75,18 @@
 
           <div class="product-single__price">
             <span class="current-price">
-              @if ($product->sale_price)
+              {{-- @if ($product->sale_price)
                     <s>${{ $product->regular_price }} </s>${{ $product->sale_price }}
                     @else
                         ${{ $product->regular_price }}
-                    @endif
+                    @endif --}}
+
+              @if($product->on_sale && $product->sale_price > 0)
+                <span class="current-price">${{ $product->sale_price }}</span>
+                <span class="old-price" style="text-decoration: line-through; color: #999;">${{ $product->regular_price }}</span>
+              @else
+                <span class="current-price">${{ $product->regular_price }}</span>
+              @endif
             </span>
           </div>
           <div class="product-single__short-desc">
@@ -228,10 +235,16 @@
 
                 <div class="product-card__price d-flex">
                   <span class="money price">
-                    @if ($product->sale_price)
+                    {{-- @if ($product->sale_price)
                     <s>${{ $product->regular_price }} </s>${{ $product->sale_price }}
                     @else
                         ${{ $product->regular_price }}
+                    @endif --}}
+                    @if($rproduct->on_sale && $rproduct->sale_price > 0)
+                      <span class="new-price">${{ $rproduct->sale_price }}</span>
+                      <span class="old-price" style="text-decoration: line-through; color: #999;">${{ $rproduct->regular_price }}</span>
+                    @else
+                      <span class="price">${{ $rproduct->regular_price }}</span>
                     @endif
                   </span>
                 </div>

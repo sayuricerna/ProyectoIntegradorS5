@@ -318,11 +318,19 @@
                 <h6 class="pc__title"><a href=" {{ route('shop.product.details',['product_slug'=>$product->slug]) }}">{{$product->name}}</a></h6>
                 <div class="product-card__price d-flex">
                   <span class="money price">
-                    @if ($product->sale_price)
+                    {{-- @if ($product->sale_price)
                     <s>${{ $product->regular_price }} </s>${{ $product->sale_price }}
                     @else
                         ${{ $product->regular_price }}
-                    @endif
+                    @endif --}}
+                            @if($product->on_sale && $product->sale_price > 0)
+              <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
+              <span class="old-price" style="text-decoration: line-through; color: #999;">
+                ${{ number_format($product->regular_price, 2) }}
+              </span>
+            @else
+              <span class="price">${{ number_format($product->regular_price, 2) }}</span>
+            @endif
 
                   </span>
                 </div>
