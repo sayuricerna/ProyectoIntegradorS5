@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('product_id')->unsigned();
             $table->bigInteger('order_id')->unsigned();
+            $table->bigInteger('product_variant_id')->unsigned()->nullable(); 
             $table->decimal('price', 10, 2);
             $table->integer('quantity');
             $table->longText('options')->nullable();
@@ -30,6 +31,11 @@ return new class extends Migration
                   ->references('id')
                   ->on('orders')
                   ->onDelete('cascade');
+
+            $table->foreign('product_variant_id')
+                  ->references('id')
+                  ->on('product_variants')
+                  ->onDelete('set null');
         });
     }
 

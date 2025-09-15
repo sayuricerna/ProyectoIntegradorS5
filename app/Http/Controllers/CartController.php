@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Address;
+use App\Models\ProductVariant;
 use Session;
 use Surfsidemedia\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ use App\Services\PaymentProcessor;
 use App\Services\Payments\BankPaymentStrategy;
 use App\Services\Payments\StripePaymentStrategy; 
 use App\Http\Controllers\Admin\InvoiceController; 
+
 class CartController extends Controller
 {
     // CODIGO COMENTADO FUNCIONANDO
@@ -31,73 +33,100 @@ class CartController extends Controller
         return view('cart', compact('items'));
 
     }
-    // public function addToCart(Request $request)
-    // {
-    //     Cart::instance('cart')->add( $request->id, $request->name, $request->quantity, $request->price )->associate('App\Models\Product');  
-    //     return redirect()->back();
-
-    // }
+/**
+     * Agrega un producto (con o sin variante) al carrito.
+     */
     public function addToCart(Request $request)
     {
-        $product = Product::find($request->id);
-        if (!$product) {
-            return redirect()->back()->with('error', 'El producto no existe.');
-        }
-        $priceToAdd = 0.0;
+        // 1. Validar la solicitud
+        $request->validate([
+            'id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'variant_id' => 'nullable|exists:product_variants,id'
+        ]);
 
-        if ($product->on_sale && !is_null($product->sale_price) && $product->sale_price > 0) {
-            $priceToAdd = $product->sale_price;
-        }
-        elseif (!is_null($product->regular_price) && $product->regular_price > 0) {
-            $priceToAdd = $product->regular_price;
-        }
-        else {
-            $priceFromRequest = (float) $request->price;
-            if ($priceFromRequest > 0) {
-                $priceToAdd = $priceFromRequest;
+        $productId = $request->id;
+        $variantId = $request->variant_id;
+        $priceToAdd = 0.0;
+        $productName = '';
+
+        if ($variantId) {
+            // Si se selecciona una variante, usa los datos de la variante
+            $variant = ProductVariant::find($variantId);
+            if (!$variant) {
+                return redirect()->back()->with('error', 'La variante del producto no existe.');
             }
+            $product = Product::find($variant->product_id);
+
+            $productName = $product->name . ' - ' . $variant->color . ' ' . $variant->size;
+            $priceToAdd = $variant->on_sale ? $variant->sale_price : $variant->regular_price;
+            
+            // Verificar si la variante ya está en el carrito
+            $cartItem = Cart::instance('cart')->content()->first(function($item) use ($variantId) {
+                return $item->options->variant_id === $variantId;
+            });
+
+            if ($cartItem) {
+                // Si ya está, redirigir al carrito o mostrar un mensaje
+                return redirect()->route('cart.index')->with('success', 'Este producto ya está en tu carrito.');
+            }
+
+        } else {
+            // Si no hay variante, usar los datos del producto principal
+            $product = Product::find($productId);
+            $productName = $product->name;
+            $priceToAdd = $product->on_sale ? $product->sale_price : $product->regular_price;
         }
+
         if ($priceToAdd <= 0) {
             return redirect()->back()->with('error', 'No se pudo determinar un precio válido para el producto.');
         }
+
+        // 2. Agregar el item al carrito, incluyendo las opciones para identificarlo
         Cart::instance('cart')->add(
-            $product->id,
-            $product->name,
+            $productId,
+            $productName,
             $request->quantity,
-            $priceToAdd
+            $priceToAdd,
+            [
+                'product_id' => $productId,
+                'variant_id' => $variantId
+            ]
         )->associate('App\Models\Product');
 
         return redirect()->back()->with('success', 'Producto agregado al carrito.');
     }
 
-
     public function increaseCartQuantity($rowId)
     {
-            $item = Cart::instance('cart')->get($rowId);
-    $product = Product::find($item->id); // Buscamos el producto en la base de datos
+        $item = Cart::instance('cart')->get($rowId);
+        
+        $stock = 0;
+        if ($item->options->variant_id) {
+            // Si tiene una variante, verificamos el stock de la variante
+            $variant = ProductVariant::find($item->options->variant_id);
+            $stock = $variant ? $variant->quantity : 0;
+        } else {
+            // Si es un producto simple, verificamos el stock del producto principal
+            $product = Product::find($item->id);
+            $stock = $product ? $product->quantity : 0;
+        }
 
-    if ($item->qty >= $product->quantity) {
-        // Si no hay más stock, regresamos con un mensaje de error
-        return redirect()->back()->with('error_message', 'Se ha alcanzado el stock máximo para este producto.');
-    }
+        if ($item->qty >= $stock) {
+            return redirect()->back()->with('error_message', 'Se ha alcanzado el stock máximo para este producto.');
+        }
 
-    // Si hay stock, aumentamos la cantidad
-    $qty = $item->qty + 1;
-    Cart::instance('cart')->update($rowId, $qty);
-    return redirect()->back();
-        // $product = Cart::instance('cart')->get($rowId);
-        // $qty = $product->qty +1;
-        // Cart::instance('cart')->update($rowId, $qty);
-        // return redirect()->back();
-
-    }
-    public function decreaseCartQuantity($rowId)
-    {
-        $product = Cart::instance('cart')->get($rowId);
-        $qty = $product->qty -1;
+        $qty = $item->qty + 1;
         Cart::instance('cart')->update($rowId, $qty);
         return redirect()->back();
+    }
 
+    public function decreaseCartQuantity($rowId)
+    {
+        $item = Cart::instance('cart')->get($rowId);
+        $qty = $item->qty - 1;
+        Cart::instance('cart')->update($rowId, $qty);
+        return redirect()->back();
     }
     public function removeItem($rowId)
     {
@@ -120,14 +149,26 @@ class CartController extends Controller
     }
     public function placeOrder( Request $request )
     {
-        // Validacion de stock
         foreach (Cart::instance('cart')->content() as $item) {
-            $product = Product::find($item->id);
-            if ($product->quantity < $item->qty) {
-                // Redirige al carrito si no hay stock suficiente para algún producto
-                return redirect()->route('cart.index')->with('error_message', 'El producto "' . $product->name . '" ya no tiene suficiente stock. Por favor, revisa tu carrito.');
+            if ($item->options->variant_id) {
+                // Si tiene una variante, verificamos el stock de la variante
+                $variant = ProductVariant::find($item->options->variant_id);
+                $stock = $variant ? $variant->quantity : 0;
+                $product = Product::find($variant->product_id);
+            } else {
+                // Si es un producto simple, verificamos el stock del producto principal
+                $product = Product::find($item->id);
+                $stock = $product ? $product->quantity : 0;
             }
         }
+
+        // foreach (Cart::instance('cart')->content() as $item) {
+        //     $product = Product::find($item->id);
+        //     if ($product->quantity < $item->qty) {
+        //         // Redirige al carrito si no hay stock suficiente para algún producto
+        //         return redirect()->route('cart.index')->with('error_message', 'El producto "' . $product->name . '" ya no tiene suficiente stock. Por favor, revisa tu carrito.');
+        //     }
+        // }
         // Validacion de direccion
         $user_id = Auth::user()->id;
         $address = Address::where('user_id', $user_id)->where('is_default', true)->first();
@@ -183,6 +224,8 @@ class CartController extends Controller
             $orderItem->order_id = $order->id;
             $orderItem->price = $item->price;
             $orderItem->quantity = $item->qty;
+            $orderItem->product_variant_id = $item->options->variant_id; // Guardar la variante si existe
+            
             $orderItem->save();
         }
     
@@ -205,16 +248,41 @@ class CartController extends Controller
 
         if ($paymentSuccess) {
                 // ===================== INICIO: BLOQUE PARA DESCONTAR STOCK =====================
-            foreach ($order->orderItems as $item) {
-                $product = Product::find($item->product_id);
-                $product->quantity -= $item->quantity; // Restamos la cantidad comprada
-                // Si el stock llega a 0, actualizamos el estado
-                if ($product->quantity <= 0) {
-                    $product->stock_status = 'outofstock';
-                }
+            // foreach ($order->orderItems as $item) {
+            //     $product = Product::find($item->product_id);
+            //     $product->quantity -= $item->quantity; // Restamos la cantidad comprada
+            //     // Si el stock llega a 0, actualizamos el estado
+            //     if ($product->quantity <= 0) {
+            //         $product->stock_status = 'outofstock';
+            //     }
                 
-                $product->save(); // Guardamos los cambios en el producto
+            //     $product->save(); // Guardamos los cambios en el producto
+            // }
+            foreach (Cart::instance('cart')->content() as $item) {
+                if ($item->options->variant_id) {
+                    // Si tiene una variante, descontamos el stock de la variante
+                    $variant = ProductVariant::find($item->options->variant_id);
+                    if ($variant) {
+                        $variant->quantity -= $item->qty;
+                        if ($variant->quantity <= 0) {
+                            $variant->quantity = 0; // Aseguramos que no sea negativo
+                        }
+                        $variant->save();
+                    }
+                } else {
+                    // Si es un producto simple, descontamos el stock del producto principal
+                    $product = Product::find($item->id);
+                    if ($product) {
+                        $product->quantity -= $item->qty;
+                        if ($product->quantity <= 0) {
+                            $product->quantity = 0; // Aseguramos que no sea negativo
+                            $product->stock_status = 'outofstock';
+                        }
+                        $product->save();
+                    }
+                }
             }
+            // ===================== FIN: BLOQUE PARA DESCONTAR STOCK =====================
 
                 Cart::instance('cart')->destroy();
                 Session::forget('checkout');

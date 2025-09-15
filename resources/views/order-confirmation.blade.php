@@ -57,7 +57,7 @@
           </div>
           <div class="order-info__item">
             <label>método de Pago</label>
-            <span>{{ $order->transaction->mode }}</span>
+            <span>{{ $order->transaction->mode == "stripe" ? 'Tarjeta (Stripe)' : 'Transferencia Bancaria' }}</span>
           </div>
         </div>
         {{-- BTON DESCARGAR FACTURA --}}

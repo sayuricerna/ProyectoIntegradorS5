@@ -6,6 +6,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BrandController;
@@ -15,12 +16,15 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
 
 Auth::routes();
 
 // Rutas públicas
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop', [ShopController::class,'index'])->name('shop.index');
+Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 Route::get('/shop/{product_slug}', [ShopController::class,'productDetails'])->name('shop.product.details');
 
 // carrito
@@ -28,8 +32,13 @@ Route::get('/cart', [CartController::class,'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class,'addToCart'])->name('cart.add');
 Route::put('cart/increase-quantity/{rowId}', [CartController::class,'increaseCartQuantity'])->name('cart.qty.increase');
 Route::put('cart/decrease-quantity/{rowId}', [CartController::class,'decreaseCartQuantity'])->name('cart.qty.decrease');
+
 Route::delete('cart/remove/{rowId}', [CartController::class,'removeItem'])->name('cart.item.remove');
 Route::delete('cart/clear', [CartController::class,'emptyCart'])->name('cart.empty');
+Route::get('/cart-content', function (Request $request) {
+    return response()->json(Cart::instance('cart')->content());
+})->name('cart.content');
+
 
 // lista de deseos (wishlist)
 Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
@@ -86,4 +95,17 @@ Route::middleware(['auth',AuthAdmin::class])->group(function(){
     Route::get('admin/orders', [OrderController::class, 'orders'])->name('admin.orders');
     Route::get('admin/order/details/{id}', [OrderController::class, 'orderDetails'])->name('admin.order.details');
     Route::put('admin/order/update-status', [OrderController::class, 'updateOrderStatus'])->name('admin.order.status.update');
+
+    //Usuarios
+    Route::get('/admin/users', [App\Http\Controllers\Admin\UserController::class, 'users'])->name('admin.users');
+    Route::get('/admin/users/add', [App\Http\Controllers\Admin\UserController::class, 'addUser'])->name('admin.users.add');
+    Route::post('/admin/users/store', [App\Http\Controllers\Admin\UserController::class, 'storeUser'])->name('admin.users.store');
+    Route::get('/admin/users/edit/{id}', [App\Http\Controllers\Admin\UserController::class, 'editUser'])->name('admin.users.edit');
+    Route::post('/admin/users/update', [App\Http\Controllers\Admin\UserController::class, 'updateUser'])->name('admin.users.update');
+    Route::get('/admin/users/delete/{id}', [App\Http\Controllers\Admin\UserController::class, 'deleteUser'])->name('admin.users.delete');
+    
+   //Pos
+    Route::get('/admin/pos', [PosController::class, 'showPos'])->name('admin.pos');
+    Route::post('/admin/pos/process-order', [PosController::class, 'processOrder'])->name('admin.pos.process_order');
+
 });

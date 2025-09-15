@@ -13,13 +13,7 @@ class Product extends Model
         'slug',
         'short_description',
         'description',
-        'regular_price',
-        'sale_price',
-        'on_sale',
-        'sku',
-        'stock_status',
         'featured',
-        'quantity',
         'image',
         'images',
         'category_id',
@@ -30,6 +24,10 @@ class Product extends Model
     }
     public function brand(){
         return $this->belongsTo(Brand::class, "brand_id");
+    }
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
     }
     protected static function boot()
     {

@@ -35,7 +35,7 @@
                 <div><strong>Factura N°:</strong> {{ $invoice->invoice_number }}</div>
                 <div><strong>Fecha:</strong> {{ $invoice->issue_date->format('d/m/Y') }}</div>
                 <div><strong>Pedido N°:</strong> {{ $order->id }}</div>
-                <div><strong>Método Pago:</strong> {{ ucfirst($invoice->payment_method) }}</div>
+                <div><strong>Método de Pago:</strong> {{ ucfirst($invoice->payment_method) }}</div>
             </div>
         </div>
         
@@ -90,6 +90,9 @@
         
         <div class="footer">
             <p>Gracias por su compra</p>
+            <p>SwimRoom - Ecuador</p>
+            {{-- icono --}}
+            <i class="icon-shopping-bag"></i>
         </div>
     </div>
 </body>

@@ -38,7 +38,7 @@ class UserController extends Controller
         $order->status = 'canceled';
         $order->canceled_date = Carbon::now();
         $order->save();
-        return back()->with('status', 'Order has been cancelled successfully.');
+        return back()->with('status', 'Se ha cancelado el pedido exitosamente.');
     }
     // public function editAddress()
     // {

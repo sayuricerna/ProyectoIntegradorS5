@@ -55,7 +55,7 @@
                                     <div class="text-tiny mt-3">{{$product->slug}}</div>
                                 </div>
                             </td>
-                            <td>{{$product->regular_price}}</td>
+                            {{-- <td>{{$product->regular_price}}</td>
                             <td>{{$product->sale_price}}</td>
                             <td>{{$product->sku}}</td>
                             <td>{{$product->category->name}}</td>
@@ -63,7 +63,50 @@
                             <td>{{$product->feature == 0 ? "No":"Si"}}</td>
                             <td>{{$product->stock_status}}</td>
                             <td>{{$product->quantity}}</td>
+                            <td> --}}
+                            @php
+                                $firstVariant = $product->variants->first();
+                                $isVariantProduct = $product->variants->count() > 1;
+
+                                $regularPrices = $product->variants->pluck('regular_price');
+                                $salePrices = $product->variants->pluck('sale_price');
+                                $totalQuantity = $product->variants->sum('quantity');
+                            @endphp
+
                             <td>
+    @if($isVariantProduct)
+        ${{ number_format($regularPrices->min(), 2) }} - ${{ number_format($regularPrices->max(), 2) }}
+    @else
+        @if($firstVariant)
+            ${{ number_format($firstVariant->regular_price, 2) }}
+        @else
+            -
+        @endif
+    @endif
+</td>
+<td>
+    @if($isVariantProduct)
+        @if ($salePrices->filter()->isNotEmpty())
+            ${{ number_format($salePrices->filter()->min(), 2) }} - ${{ number_format($salePrices->filter()->max(), 2) }}
+        @else
+            -
+        @endif
+    @else
+        @if ($firstVariant && $firstVariant->sale_price)
+            ${{ number_format($firstVariant->sale_price, 2) }}
+        @else
+            -
+        @endif
+    @endif
+</td>
+                            <td>{{ $firstVariant->sku ?? 'N/A' }}</td>
+                            <td>{{ $product->category->name }}</td>
+                            <td>{{ $product->brand->name }}</td>
+                            <td>{{ $product->featured == 0 ? "No":"Si"}}</td>
+                            <td>{{ $firstVariant->stock_status ?? 'N/A'}}</td>
+                            <td>{{ $totalQuantity }}</td>
+                            <td>
+        
                                 <div class="list-icon-function">
                                     <a href="#" target="_blank"><div class="item eye"><i class="icon-eye"></i></div></a>
                                     <a href="{{ route('admin.product.edit',['id'=>$product->id]) }}">

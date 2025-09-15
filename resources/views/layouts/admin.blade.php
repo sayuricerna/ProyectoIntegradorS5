@@ -137,6 +137,20 @@
                             </a>
                         </li> 
 
+                        {{-- USUARIOS --}}
+                        <li class="menu-item">
+                            <a href="{{ route('admin.users') }}" class="">
+                                <div class="icon"><i class="icon-layers"></i></div>
+                                <div class="text">Usuarios</div>
+                            </a>
+                        </li> 
+                        {{-- Registrar Venta fisica --}}
+                        <li class="menu-item">
+                            <a href="{{ route('admin.pos') }}" class="">
+                                <div class="icon"><i class="icon-layers"></i></div>
+                                <div class="text">POS</div>
+                            </a>
+                        </li> 
                         <li class="menu-item has-children">
                             <a href="{{ route('admin.orders') }}" class="menu-item-button">
                                 <div class="icon"><i class="icon-file-plus"></i></div>

@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected $fillable = [
+    //     'user_id',
+    //     'order_status',
+    //     'payment_method',
+    //     'payment_status',
+    //     'subtotal',
+    //     'tax',
+    // ];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -19,7 +32,6 @@ class Order extends Model
     {
         return $this->hasOne(Transaction::class);
     }
-        // Agg
     public function invoice()
     {
         return $this->hasOne(Invoice::class);

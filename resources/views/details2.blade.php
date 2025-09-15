@@ -354,37 +354,103 @@
             }
             variantIdInput.value = variant.id;
         }
-        function updateAddToCartButton(variant) {
-            const addToCartContainer = document.getElementById('add-to-cart-container');
-            const isInCart = cartItems.some(item => item.options.variant_id == variant.id);
-            addToCartContainer.innerHTML = '';
-            if (isInCart) {
-                const goToCartBtn = document.createElement('a');
-                goToCartBtn.href = "{{ route('cart.index') }}";
-                goToCartBtn.className = "btn btn-warning mb-3 btn-go-to-cart";
-                goToCartBtn.innerText = "Ir al carrito";
-                addToCartContainer.appendChild(goToCartBtn);
-            } else {
-                const addToCartFormHtml = `
-                    <form name="addtocart-form" method="post" action="{{ route('cart.add') }}">
-                        @csrf
-                       <div class="product-single__addtocart">
-                            <div class="qty-control position-relative">
-                                <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center">
-                                <div class="qty-control__reduce">-</div>
-                                <div class="qty-control__increase">+</div>
-                            </div>
-                            <input type="hidden" name="id" value="{{ $product->id }}"/>
-                            <input type="hidden" name="name" value="{{ $product->name }}"/>
-                            <input type="hidden" name="price" value="${variant.on_sale ? variant.sale_price : variant.regular_price}"/>
-                            <input type="hidden" name="variant_id" id="variant-id-input" value="${variant.id}"/> 
-                            <button type="submit" class="btn btn-primary btn-addtocart" data-aside="cartDrawer">Añadir al carrito</button>
+        // function updateAddToCartButton(variant) {
+        //     const addToCartContainer = document.getElementById('add-to-cart-container');
+        //     const isInCart = cartItems.some(item => item.options.variant_id == variant.id);
+        //     addToCartContainer.innerHTML = '';
+        //     if (isInCart) {
+        //         const goToCartBtn = document.createElement('a');
+        //         goToCartBtn.href = "{{ route('cart.index') }}";
+        //         goToCartBtn.className = "btn btn-warning mb-3 btn-go-to-cart";
+        //         goToCartBtn.innerText = "Ir al carrito";
+        //         addToCartContainer.appendChild(goToCartBtn);
+        //     } else {
+        //         const addToCartFormHtml = `
+        //             <form name="addtocart-form" method="post" action="{{ route('cart.add') }}">
+        //                 @csrf
+        //                <div class="product-single__addtocart">
+        //                     <div class="qty-control position-relative">
+        //                         <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center">
+        //                         <div class="qty-control__reduce">-</div>
+        //                         <div class="qty-control__increase">+</div>
+        //                     </div>
+        //                     <input type="hidden" name="id" value="{{ $product->id }}"/>
+        //                     <input type="hidden" name="name" value="{{ $product->name }}"/>
+        //                     <input type="hidden" name="price" value="${variant.on_sale ? variant.sale_price : variant.regular_price}"/>
+        //                     <input type="hidden" name="variant_id" id="variant-id-input" value="${variant.id}"/> 
+        //                     <button type="submit" class="btn btn-primary btn-addtocart" data-aside="cartDrawer">Añadir al carrito</button>
+        //                 </div>
+        //            </form>
+        //         `;
+        //         addToCartContainer.innerHTML = addToCartFormHtml;
+        //     }
+        // }
+async function updateAddToCartButton(variant) {
+    const addToCartContainer = document.getElementById('add-to-cart-container');
+    if (!variant) {
+        // Si no hay una variante seleccionada, mostramos un mensaje para que el usuario la elija
+        addToCartContainer.innerHTML = `<button type="button" disabled class="btn btn-primary btn-addtocart">Seleccione una variante</button>`;
+        return;
+    }
+    try {
+        const response = await fetch("{{ route('cart.content') }}");
+        const updatedCartItems = await response.json();
+        const isInCart = Object.values(updatedCartItems).some(item => {
+            // Comprobamos si el item del carrito tiene una variante asociada y si coincide con la variante seleccionada
+            return item.options && item.options.variant_id == variant.id;
+        });
+        addToCartContainer.innerHTML = ''; // Limpiamos el contenido anterior del contenedor
+        if (isInCart) {
+            // Si la variante está en el carrito, mostramos el botón "Ir al carrito"
+            const goToCartBtn = document.createElement('a');
+            goToCartBtn.href = "{{ route('cart.index') }}";
+            goToCartBtn.className = "btn btn-warning btn-go-to-cart";
+            goToCartBtn.innerText = "Ir al carrito";
+            addToCartContainer.appendChild(goToCartBtn);
+        } else {
+            // Si no está, mostramos el formulario "Añadir al carrito"
+            const addToCartFormHtml = `
+                <form name="addtocart-form" method="post" action="{{ route('cart.add') }}">
+                    @csrf
+                    <div class="product-single__addtocart">
+                        <div class="qty-control position-relative">
+                            <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center">
+                            <div class="qty-control__reduce">-</div>
+                            <div class="qty-control__increase">+</div>
                         </div>
-                   </form>
-                `;
-                addToCartContainer.innerHTML = addToCartFormHtml;
-            }
+                        <input type="hidden" name="id" value="{{ $product->id }}"/>
+                        <input type="hidden" name="name" value="{{ $product->name }}"/>
+                        <input type="hidden" name="price" value="${variant.on_sale ? variant.sale_price : variant.regular_price}"/>
+                        <input type="hidden" name="variant_id" id="variant-id-input" value="${variant.id}"/>
+                        <button type="submit" class="btn btn-primary btn-addtocart" data-aside="cartDrawer">Añadir al carrito</button>
+                    </div>
+                </form>
+            `;
+            addToCartContainer.innerHTML = addToCartFormHtml;
         }
+    } catch (error) {
+        console.error("Error al obtener el contenido del carrito:", error);
+        // En caso de error, muestra el formulario de "Añadir al carrito" por defecto para no dejar al usuario sin opción.
+        const defaultFormHtml = `
+            <form name="addtocart-form" method="post" action="{{ route('cart.add') }}">
+                @csrf
+                <div class="product-single__addtocart">
+                    <div class="qty-control position-relative">
+                        <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center">
+                        <div class="qty-control__reduce">-</div>
+                        <div class="qty-control__increase">+</div>
+                    </div>
+                    <input type="hidden" name="id" value="{{ $product->id }}"/>
+                    <input type="hidden" name="name" value="{{ $product->name }}"/>
+                    <input type="hidden" name="price" value="${variant.on_sale ? variant.sale_price : variant.regular_price}"/>
+                    <input type="hidden" name="variant_id" id="variant-id-input" value="${variant.id}"/>
+                    <button type="submit" class="btn btn-primary btn-addtocart" data-aside="cartDrawer">Añadir al carrito</button>
+                </div>
+            </form>
+        `;
+        addToCartContainer.innerHTML = defaultFormHtml;
+    }
+}
         const firstColorButton = document.querySelector('.color-options .variant-option');
         if (firstColorButton) firstColorButton.click();
         const firstSizeButton = document.querySelector('.size-options .variant-option');
