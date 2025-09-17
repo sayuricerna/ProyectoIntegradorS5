@@ -154,13 +154,14 @@
                         <td> {{ $order->total }}     </td>
                         <th>Modo de Pago</th>
                         <td> 
-                        @if ($transaction->mode == 'stripe') {
-                            echo 'Tarjeta de Crédito/Débito';
-                        } @elseif ($transaction->mode == 'tranference') {
-                            echo 'Transferencia Bancaria';
-                        } @else {
-                            echo 'Otro';
-                        }</td>
+                        @if ($transaction->mode == 'stripe')
+                            Tarjeta de Crédito/Débito
+                        @elseif ($transaction->mode == 'tranference')
+                            Transferencia Bancaria
+                        @else
+                            Otro
+                        @endif
+                        </td>
                         <th>Estado</th>
                         <td>  
                             @if ($transaction->status == 'approved')

@@ -16,8 +16,7 @@
             <p>ver: 
               <a class="unerline-link" href="account_orders.html">pedidos </a>, 
               {{-- <a class="unerline-link" href="account_edit_address.html">direcciones de envio</a>,  --}}
-              <a class="unerline-link" href="account_edit.html">editar cuenta y contraseña</a>
-            </p>
+              <a class="unerline-link" href="{{ route('user.account.edit') }}">editar cuenta y contraseña</a>            </p>
           </div>
         </div>
       </div>

@@ -1,4 +1,104 @@
 <?php
+// namespace App\Http\Controllers\Admin;
+// use App\Models\Order;
+// use App\Models\Invoice;
+
+// use Barryvdh\DomPDF\Facade\Pdf;
+// use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Str;
+//  use App\Http\Controllers\Controller;
+
+// class InvoiceController extends Controller
+// {
+//     public function generate(Order $order)
+//     {
+//         if ($order->invoice) {
+//             return $order->invoice;
+//         }
+//         $user = $order->user;
+//         $transaction = $order->transaction;
+
+//         $items = $order->orderItems->map(function ($item) {
+//             return [
+//                 'name' => $item->product->name,
+//                 'quantity' => $item->quantity,
+//                 'price' => $item->price,
+//                 'sku' => $item->product->sku,
+//                 'description' => $item->product->short_description,
+//                 'unit_price' => $item->price / $item->quantity
+//             ];
+//         });
+
+//         $invoice = Invoice::create([
+//             'invoice_number' => $this->generateInvoiceNumber(),
+//             'issue_date' => now(),
+//             'order_id' => $order->id,
+//             'user_id' => $user->id,
+//             'client_name' => $order->name,
+//              'client_cedula' => $order->cedula,
+//             'client_email' => $user->email,
+//             'client_phone' => $order->phone,
+//             'client_address' => $order->address,
+//             'client_city' => $order->city,
+//             'client_province' => $order->province,
+//             'client_country' => $order->country,
+//             'client_zip' => $order->zip,
+//             'payment_method' => $transaction->mode,
+//             'subtotal' => $order->subtotal,
+//             'tax_amount' => $order->tax,
+//             'total_amount' => $order->total,
+//             'items' => $items,
+//             'pdf_path' => ''
+//         ]);
+
+//         $this->generatePdf($invoice, $order);
+//         return $invoice;
+//     }
+
+//     protected function generateInvoiceNumber()
+//     {
+//         $prefix = 'FACT-';
+//         $date = now()->format('Ymd');
+//         $lastInvoice = Invoice::orderBy('id', 'desc')->first();
+        
+//         $number = $lastInvoice ? (int)explode('-', $lastInvoice->invoice_number)[2] + 1 : 1;
+        
+//         return $prefix . $date . '-' . str_pad($number, 5, '0', STR_PAD_LEFT);
+//     }
+
+//     protected function generatePdf(Invoice $invoice, Order $order)
+//     {
+//         $pdf = PDF::loadView('pdf.invoice', [
+//             'invoice' => $invoice,
+//             'order' => $order,
+//             'items' => $invoice->items
+//         ]);
+
+//         $filename = 'invoice_' . $invoice->invoice_number . '.pdf';
+//         $path = 'invoices/' . $filename;
+        
+//         Storage::put($path, $pdf->output());
+//         $invoice->update(['pdf_path' => $path]);
+//     }
+
+//     public function download(Order $order)
+//     {
+//         if (auth()->id() !== $order->user_id) {
+//             abort(403);
+//         }
+
+//         if (!$order->invoice) {
+//             $invoice = $this->generate($order);
+//         } else {
+//             $invoice = $order->invoice;
+//         }
+//         return response()->download(
+//             Storage::path($invoice->pdf_path),
+//             'factura_'. $invoice->invoice_number . '.pdf'
+//         );
+//     }
+// }
+
 namespace App\Http\Controllers\Admin;
 use App\Models\Order;
 use App\Models\Invoice;
@@ -6,7 +106,7 @@ use App\Models\Invoice;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
- use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 
 class InvoiceController extends Controller
 {
@@ -15,17 +115,15 @@ class InvoiceController extends Controller
         if ($order->invoice) {
             return $order->invoice;
         }
-        $user = $order->user;
-        $transaction = $order->transaction;
-
-        $items = $order->orderItems->map(function ($item) {
+        
+        // Obtiene la información del cliente directamente del modelo Order
+        $items = $order->orderProducts->map(function ($item) {
             return [
                 'name' => $item->product->name,
                 'quantity' => $item->quantity,
                 'price' => $item->price,
-                'sku' => $item->product->sku,
-                'description' => $item->product->short_description,
-                'unit_price' => $item->price / $item->quantity
+                'sku' => $item->variant->sku,
+                'unit_price' => $item->price
             ];
         });
 
@@ -33,19 +131,12 @@ class InvoiceController extends Controller
             'invoice_number' => $this->generateInvoiceNumber(),
             'issue_date' => now(),
             'order_id' => $order->id,
-            'user_id' => $user->id,
-            'client_name' => $order->name,
-             'client_cedula' => $order->cedula,
-            'client_email' => $user->email,
-            'client_phone' => $order->phone,
-            'client_address' => $order->address,
-            'client_city' => $order->city,
-            'client_province' => $order->province,
-            'client_country' => $order->country,
-            'client_zip' => $order->zip,
-            'payment_method' => $transaction->mode,
-            'subtotal' => $order->subtotal,
-            'tax_amount' => $order->tax,
+            'user_id' => $order->user_id,
+            'client_name' => $order->customer_name,
+            'client_cedula' => $order->customer_cedula,
+            'client_phone' => $order->customer_phone,
+            'payment_method' => $order->payment_method,
+            'subtotal' => $order->total,
             'total_amount' => $order->total,
             'items' => $items,
             'pdf_path' => ''
@@ -68,6 +159,7 @@ class InvoiceController extends Controller
 
     protected function generatePdf(Invoice $invoice, Order $order)
     {
+        // Asegúrate de que tu vista para el PDF esté en resources/views/pdf/invoice.blade.php
         $pdf = PDF::loadView('pdf.invoice', [
             'invoice' => $invoice,
             'order' => $order,
@@ -83,15 +175,15 @@ class InvoiceController extends Controller
 
     public function download(Order $order)
     {
-        if (auth()->id() !== $order->user_id) {
-            abort(403);
-        }
-
+        // Se valida que la orden tenga una factura
         if (!$order->invoice) {
+            // Si no existe, se crea
             $invoice = $this->generate($order);
         } else {
             $invoice = $order->invoice;
         }
+
+        // Se descarga el archivo
         return response()->download(
             Storage::path($invoice->pdf_path),
             'factura_'. $invoice->invoice_number . '.pdf'

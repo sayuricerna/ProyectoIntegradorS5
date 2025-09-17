@@ -59,6 +59,8 @@ Route::middleware(['auth'])->group(function(){
     Route::put('/account-order/cancel', [UserController::class,'cancelOrder'])->name('user.order.cancel');
     Route::get('/orders/{order}/invoice/download', [InvoiceController::class, 'download']) ->name('invoice.download');
 
+    Route::get('/user/account/edit', [UserController::class, 'editProfile'])->name('user.account.edit');
+    Route::post('/user/account/update', [UserController::class, 'updateProfile'])->name('user.account.update');
     // Route::get('/account-address', [UserController::class, 'editAdress'])->name('user.address.edit');
     // Route::post('/account-address', [UserController::class, 'updateAdress'])->name('user.address.update');
 });
@@ -105,7 +107,13 @@ Route::middleware(['auth',AuthAdmin::class])->group(function(){
     Route::get('/admin/users/delete/{id}', [App\Http\Controllers\Admin\UserController::class, 'deleteUser'])->name('admin.users.delete');
     
    //Pos
-    Route::get('/admin/pos', [PosController::class, 'showPos'])->name('admin.pos');
-    Route::post('/admin/pos/process-order', [PosController::class, 'processOrder'])->name('admin.pos.process_order');
+    // Route::get('/admin/pos', [PosController::class, 'showPos'])->name('admin.pos');
+    // Route::post('/admin/pos/process-order', [PosController::class, 'processOrder'])->name('admin.pos.process_order');
 
+    // Rutas para el POS
+
+        // Ruta para la descarga de la factura
+    Route::get('invoices/download/{order}', [InvoiceController::class, 'download'])->name('admin.invoices.download');
+    Route::get('pos/simple', [PosController::class, 'showSimplePos'])->name('admin.pos.simple');
+    Route::post('pos/simple/process', [PosController::class, 'processSimpleOrder'])->name('admin.pos.process_simple_order');
 });

@@ -1,77 +1,58 @@
 <?php
 
-// namespace App\Http\Controllers\Admin;
-
-// use App\Http\Controllers\Controller;
-// use App\Models\User;
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Str;
-// use Illuminate\Support\Facades\File;
-// use Intervention\Image\Laravel\Facades\Image;
-// use Carbon\Carbon;
-
-// class PosController extends Controller
-// {
-//     public function pos()
-//     {
-//         $users = Pos::orderBy('id', 'DESC')->paginate(10);
-//         return view('admin.pos', compact('pos'));
-//     }
-
-// }
-
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Admin\InvoiceController;
 
 class PosController extends Controller
 {
-    public function showPos()
+    public function showSimplePos()
     {
-        // Muestra la vista principal del POS.
-        // Aquí puedes precargar algunos productos o categorías si lo deseas.
-        $products = Product::with('variants')->paginate(20);
-        return view('admin.pos', compact('products'));
+        // Muestra la vista del POS simple
+        return view('admin.pos-simple');
     }
 
-    public function processOrder(Request $request)
+    public function processSimpleOrder(Request $request)
     {
         // 1. Validar los datos del formulario
         $request->validate([
-            'customer_name' => 'nullable|string|max:255',
-            'customer_email' => 'nullable|email|max:255',
+            'customer_name' => 'required|string|max:255',
+            'customer_cedula' => 'nullable|string|max:255',
+            'customer_phone' => 'nullable|string|max:255',
             'payment_method' => 'required|string',
             'products' => 'required|array|min:1',
-            'products.*.variant_id' => 'required|exists:product_variants,id',
+            'products.*.sku' => 'required|string',
             'products.*.quantity' => 'required|integer|min:1',
         ]);
         
         try {
             DB::beginTransaction();
 
-            // 2. Crear una nueva orden (similar a tu lógica de checkout online)
+            // 2. Crear una nueva orden con los datos del formulario
             $order = new Order();
+            // Asigna un usuario por defecto si no hay uno (en este caso, null)
+            $order->user_id = auth()->check() ? auth()->id() : null; 
             $order->customer_name = $request->input('customer_name');
-            $order->customer_email = $request->input('customer_email');
+            $order->customer_cedula = $request->input('customer_cedula');
+            $order->customer_phone = $request->input('customer_phone');
             $order->payment_method = $request->input('payment_method');
-            $order->status = 'completed'; // Un pedido en POS se considera completado
-            $order->total = 0; // Se calculará a continuación
+            $order->status = 'completed';
+            $order->total = 0; 
             $order->save();
 
             $totalPrice = 0;
 
-            // 3. Procesar los productos del carrito
+            // 3. Procesar los productos enviados por SKU
             foreach ($request->input('products') as $productData) {
-                $variant = ProductVariant::findOrFail($productData['variant_id']);
+                // Busca el producto o variante por SKU
+                $variant = ProductVariant::where('sku', $productData['sku'])->firstOrFail();
 
-                // Asegúrate de que haya suficiente stock
                 if ($variant->quantity < $productData['quantity']) {
                     DB::rollBack();
                     return back()->with('error', 'No hay suficiente stock para el producto: ' . $variant->product->name . ' SKU: ' . $variant->sku);
@@ -90,16 +71,21 @@ class PosController extends Controller
                     'price' => $price,
                 ]);
 
-                // 5. Actualizar el stock del producto
+                // 5. Actualizar el stock
                 $variant->decrement('quantity', $productData['quantity']);
             }
 
-            // 6. Actualizar el total de la orden y guardar
+            // 6. Actualizar el total de la orden
             $order->update(['total' => $totalPrice]);
 
             DB::commit();
 
-            return redirect()->route('admin.pos')->with('success', 'Venta realizada con éxito! Orden #' . $order->id);
+            // 7. Generar la factura y redirigir a la descarga
+            $invoiceController = new InvoiceController();
+            $invoiceController->generate($order);
+            
+            return redirect()->route('admin.invoices.download', $order->id)
+                             ->with('success', 'Venta registrada con éxito!');
 
         } catch (\Exception $e) {
             DB::rollBack();

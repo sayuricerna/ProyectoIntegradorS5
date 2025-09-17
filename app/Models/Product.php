@@ -29,6 +29,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+    // Nueva relación: A través de OrderItem
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
     protected static function boot()
     {
         parent::boot();

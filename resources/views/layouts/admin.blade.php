@@ -146,7 +146,7 @@
                         </li> 
                         {{-- Registrar Venta fisica --}}
                         <li class="menu-item">
-                            <a href="{{ route('admin.pos') }}" class="">
+                            <a href="{{ route('admin.pos.simple') }}" class="">
                                 <div class="icon"><i class="icon-layers"></i></div>
                                 <div class="text">POS</div>
                             </a>

@@ -243,13 +243,14 @@
                         <td>${{ $order->subtotal }}</td>
                         <td>${{ $order->tax }}</td>
                         <td>${{ $order->total }}</td>
-                        <td>@if ($transaction->mode == 'stripe') {
-                            echo 'Tarjeta de Crédito/Débito';
-                        } @elseif ($transaction->mode == 'tranference') {
-                            echo 'Transferencia Bancaria';
-                        } @else {
-                            echo 'Otro';
-                        }</td>
+                        <td>@if ($transaction->mode == 'stripe')
+                                Tarjeta de Crédito/Débito
+                            @elseif ($transaction->mode == 'tranference')
+                                Transferencia Bancaria
+                            @else
+                                Otro
+                            @endif
+                        </td>
                         <td>
                             @if ($transaction->status == 'approved')
                             <span class="badge bg-success">Aprovado</span>

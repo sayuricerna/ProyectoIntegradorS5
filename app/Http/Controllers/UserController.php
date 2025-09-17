@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function index()
@@ -74,4 +76,42 @@ class UserController extends Controller
 
     //     return redirect()->back()->with('status', 'Dirección guardada correctamente.');
     // }
+    public function editProfile()
+    {
+        // Obtiene el usuario autenticado y lo pasa a la vista
+        $user = Auth::user();
+        return view('user.account-edit', compact('user'));
+    }
+    public function updateProfile(Request $request)
+    {
+        // Encuentra al usuario autenticado
+        $user = Auth::user();
+
+        // Valida los datos del formulario
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                // Ignora el email actual para evitar errores de unicidad
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        // Actualiza el nombre y el email
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        // Actualiza la contraseña si el campo no está vacío
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('status', '¡Perfil actualizado correctamente!');
+    }
 } 

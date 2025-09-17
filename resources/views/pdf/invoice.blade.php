@@ -27,7 +27,7 @@
                 <div class="company-name"> SwimRoom</div>
                 <div>Dirección:Ecuador, Santo Domingo de Los Colorados 230150 </div>
                 <div>Teléfono: 0995712907</div>
-                <div>Email: emial@swinroom.com</div>
+                <div>Email: emaIl@swinroom.com</div>
                 <div>RUC: 1759026535</div>
             </div>
             
