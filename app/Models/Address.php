@@ -27,4 +27,8 @@ class Address extends Model
         'country',
         'is_default',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

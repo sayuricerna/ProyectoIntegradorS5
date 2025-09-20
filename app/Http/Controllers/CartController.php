@@ -174,6 +174,10 @@ class CartController extends Controller
         $address = Address::where('user_id', $user_id)->where('is_default', true)->first();
 
         if (!$address) {
+            $address = Address::where('user_id', $user_id)->first();
+        }
+        
+        if (!$address) {
             $request->validate([
                 'name' => 'required',
                 'cedula' =>'required',

@@ -117,26 +117,41 @@ class InvoiceController extends Controller
         }
         
         // Obtiene la información del cliente directamente del modelo Order
-        $items = $order->orderProducts->map(function ($item) {
+        $items = $order->orderItems->map(function ($item) {
             return [
                 'name' => $item->product->name,
                 'quantity' => $item->quantity,
                 'price' => $item->price,
+                'description' => $item->product->short_description,
                 'sku' => $item->variant->sku,
                 'unit_price' => $item->price
             ];
         });
+
+        $user = $order->user;
+        $transaction = $order->transaction;
 
         $invoice = Invoice::create([
             'invoice_number' => $this->generateInvoiceNumber(),
             'issue_date' => now(),
             'order_id' => $order->id,
             'user_id' => $order->user_id,
-            'client_name' => $order->customer_name,
-            'client_cedula' => $order->customer_cedula,
-            'client_phone' => $order->customer_phone,
-            'payment_method' => $order->payment_method,
+
+            'client_name' => $order->name,
+            'client_cedula' => $order->cedula,
+            'client_phone' => $order->phone,
+             'client_email' => $user->email,
+             'client_address' => $order->address,
+            'payment_method' => $transaction->mode,
+            
+            'client_city' => $order->city,
+            'client_province' => $order->province,
+            'client_country' => $order->country,
+            'client_zip' => $order->zip,
+
             'subtotal' => $order->total,
+            'tax_amount' => $order->tax,
+
             'total_amount' => $order->total,
             'items' => $items,
             'pdf_path' => ''

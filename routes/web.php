@@ -59,6 +59,9 @@ Route::middleware(['auth'])->group(function(){
     Route::put('/account-order/cancel', [UserController::class,'cancelOrder'])->name('user.order.cancel');
     Route::get('/orders/{order}/invoice/download', [InvoiceController::class, 'download']) ->name('invoice.download');
 
+    // Rutas para la gestión de direcciones del usuario
+Route::get('/user/address', [UserController::class, 'showAddressForm'])->name('user.address.form');
+Route::post('/user/address/save', [UserController::class, 'saveAddress'])->name('user.address.save');
     Route::get('/user/account/edit', [UserController::class, 'editProfile'])->name('user.account.edit');
     Route::post('/user/account/update', [UserController::class, 'updateProfile'])->name('user.account.update');
     // Route::get('/account-address', [UserController::class, 'editAdress'])->name('user.address.edit');

@@ -114,4 +114,54 @@ class UserController extends Controller
 
         return redirect()->back()->with('status', '¡Perfil actualizado correctamente!');
     }
+
+    public function showAddressForm()
+    {
+        // Busca la dirección del usuario autenticado.
+        // Si no existe, se creará una instancia de Address vacía.
+        $address = Address::where('user_id', Auth::id())->firstOrNew(['user_id' => Auth::id()]);
+        return view('user.address-form', compact('address'));
+    }
+
+    public function saveAddress(Request $request)
+    {
+        $user = Auth::user();
+
+        // Valida los datos del formulario de dirección
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'cedula' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('addresses')->ignore($user->id, 'user_id'),
+            ],
+            'phone' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'zip' => 'required|string|max:255',
+            'reference' => 'nullable|string|max:255',
+        ]);
+
+        // Usa updateOrCreate para simplificar: si el usuario ya tiene una dirección, la actualiza,
+        // si no, la crea.
+        Address::updateOrCreate(
+            ['user_id' => $user->id],
+            $request->only([
+                'name',
+                'cedula',
+                'phone',
+                'address',
+                'city',
+                'province',
+                'country',
+                'zip',
+                'reference'
+            ])
+        );
+
+        return redirect()->back()->with('status', '¡Dirección guardada correctamente!');
+    }
 } 
